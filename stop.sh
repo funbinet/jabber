@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Graceful Shutdown (stop.sh)
+# JABBER Red Teaming Suite — Graceful Shutdown v3.1
 # Created by Funbinet (dancan.tech)
 # ============================================================
 
@@ -48,7 +48,7 @@ kill_service() {
     done
     # Force kill
     kill -9 "$PID" 2>/dev/null || true
-    ok "Force-killed ${name} (PID ${PID})"
+    ok "Force-stopped ${name} (PID ${PID})"
   else
     log "${name} already stopped"
   fi
@@ -57,12 +57,11 @@ kill_service() {
 
 # ── Kill Java backend processes ──────────────────────────────
 kill_java_residuals() {
-  if pgrep -f "jrts-core" > /dev/null 2>&1; then
-    pkill -f "jrts-core" 2>/dev/null || true
+  if pgrep -f "jrts-core\|jrts-server" > /dev/null 2>&1; then
+    pkill -f "jrts-core\|jrts-server" 2>/dev/null || true
     sleep 1
-    # Force if still alive
-    if pgrep -f "jrts-core" > /dev/null 2>&1; then
-      pkill -9 -f "jrts-core" 2>/dev/null || true
+    if pgrep -f "jrts-core\|jrts-server" > /dev/null 2>&1; then
+      pkill -9 -f "jrts-core\|jrts-server" 2>/dev/null || true
     fi
     ok "Terminated residual Java processes"
   fi
@@ -84,7 +83,7 @@ clear_ports() {
 
 # ── Main ─────────────────────────────────────────────────────
 echo ""
-echo -e "${R}Stopping JABBER services...${NC}"
+echo -e "${R}Stopping JABBER...${NC}"
 echo "─────────────────────────────────────"
 
 # Phase 1: Stop by PID files

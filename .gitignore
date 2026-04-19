@@ -19,7 +19,6 @@ dist/
 
 # ===== Runtime =====
 logs/*.log
-logs/*.pid
 *.pid
 
 # ===== Analysis artifacts =====
@@ -42,12 +41,10 @@ Thumbs.db
 # ===== Dist artifacts =====
 .dist/
 
-# ===== Report outputs (runtime generated) =====
-reports/outputs/*.json
-reports/outputs/*.html
-reports/outputs/*.meta.json
-reports/analysis/
-reports/payloads/
+# ===== Additional cache and outputs =====
+.gradle_cache/
+reports/
+
 
 # ===== Screenshots capture tooling =====
 screenshots/node_modules/
