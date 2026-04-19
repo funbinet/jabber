@@ -1,13 +1,13 @@
 #!/bin/bash
 # ============================================================
-# JABBER Debian Package Builder — v3.1
+# JABBER Debian Package Builder — v3.2
 # Builds a production-ready .deb for the JABBER Red Teaming Suite
 # Usage: ./build-deb.sh [version]
 # Created by Funbinet (dancan.tech)
 # ============================================================
 set -e
 
-VERSION="${1:-3.1.0}"
+VERSION="${1:-3.2.0}"
 PACKAGE="jabber"
 ARCH="amd64"
 MAINTAINER="Funbinet <admin@dancan.tech>"
@@ -26,7 +26,7 @@ W='\033[1;37m' NC='\033[0m'
 
 echo ""
 echo -e "${R}╔══════════════════════════════════════════╗${NC}"
-echo -e "${R}║${W}   JABBER .deb Package Builder v3.1       ${R}║${NC}"
+echo -e "${R}║${W}   JABBER .deb Package Builder v3.2       ${R}║${NC}"
 echo -e "${R}║${B}   Version: ${VERSION}                        ${R}║${NC}"
 echo -e "${R}╚══════════════════════════════════════════╝${NC}"
 echo ""
@@ -124,7 +124,7 @@ cp jrts-ui/electron/main.cjs "${PKG_DIR}${INSTALL_DIR}/ui/electron/"
 cat > "${PKG_DIR}${INSTALL_DIR}/ui/package.json" << 'PKGJSON'
 {
   "name": "jabber",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "main": "electron/main.cjs",
   "description": "JABBER Red Teaming Suite"
 }
@@ -148,7 +148,7 @@ fi
 cat > "${PKG_DIR}${INSTALL_DIR}/run.sh" << 'RUNEOF'
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Unified Launcher v3.1 (installed)
+# JABBER Red Teaming Suite — Unified Launcher v3.2 (installed)
 # ============================================================
 set -euo pipefail
 
@@ -165,7 +165,7 @@ banner() {
   echo -e "${R}     ╦╔═╗╔╗ ╔╗ ╔═╗╦═╗${NC}"
   echo -e "${R}     ║╠═╣╠╩╗╠╩╗║╣ ╠╦╝${NC}"
   echo -e "${R}    ╚╝╩ ╩╚═╝╚═╝╚═╝╩╚═${NC}"
-  echo -e "${W}    Red Teaming Suite V3.1${NC}"
+  echo -e "${W}    Red Teaming Suite V3.2${NC}"
   echo -e "${C}    Created by Funbinet${NC}"
   echo ""
 }
@@ -325,7 +325,7 @@ case "$MODE" in
 
   *)
     echo ""
-    echo -e "${W}JABBER${NC} — Red Teaming Suite V3.1"
+    echo -e "${W}JABBER${NC} — Red Teaming Suite V3.2"
     echo ""
     echo "Usage: jabber [command]"
     echo ""
@@ -343,7 +343,7 @@ chmod +x "${PKG_DIR}${INSTALL_DIR}/run.sh"
 cat > "${PKG_DIR}${INSTALL_DIR}/stop.sh" << 'STOPEOF'
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Graceful Shutdown v3.1
+# JABBER Red Teaming Suite — Graceful Shutdown v3.2
 # Created by Funbinet (dancan.tech)
 # ============================================================
 
@@ -440,7 +440,7 @@ Description: ${DESCRIPTION}
  modular security tools across 19+ attack categories including
  reconnaissance, exploitation, wireless hacking, C2, and more.
  .
- V3.1 — stabilized desktop launch, eliminated frontend timeouts,
+ V3.2 — stabilized desktop launch, eliminated frontend timeouts,
  unified backend+frontend serving, instant Electron startup.
  Created by Funbinet (dancan.tech).
 EOF
@@ -456,7 +456,7 @@ echo -e "${B}[7/8] Creating CLI wrapper and desktop entry...${NC}"
 cat > "${PKG_DIR}/usr/local/bin/jabber" << 'CLIEOF'
 #!/bin/bash
 # ============================================================
-# JABBER — CLI Command v3.1
+# JABBER — CLI Command v3.2
 # Usage:
 #   jabber          → Desktop mode (silent, GUI-only, instant)
 #   jabber web      → Browser mode (auto-opens localhost)
@@ -479,7 +479,7 @@ case "${1:-}" in
     ;;
   -h|--help|help)
     echo ""
-    echo "JABBER — Red Teaming Suite V3.1"
+    echo "JABBER — Red Teaming Suite V3.2"
     echo "Created by Funbinet (dancan.tech)"
     echo ""
     echo "Usage:"
@@ -510,7 +510,7 @@ chmod +x "${PKG_DIR}/usr/local/bin/jabber"
 cat > "${PKG_DIR}/usr/share/applications/jabber.desktop" << 'DESKTOPEOF'
 [Desktop Entry]
 Name=JABBER
-Comment=JABBER Red Teaming Suite V3.1
+Comment=JABBER Red Teaming Suite V3.2
 Exec=/opt/jabber/run.sh desk
 Icon=jabber
 Terminal=false
@@ -545,7 +545,7 @@ fi
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
-echo "║   JABBER v3.1 installed successfully!    ║"
+echo "║   JABBER v3.2 installed successfully!    ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 echo "  Commands:"

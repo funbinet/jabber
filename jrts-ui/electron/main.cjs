@@ -43,32 +43,12 @@ function createWindow() {
       console.error('Ensure frontend is running on port 5173');
     });
   } else {
-    // Production mode: load the built index.html from disk
-    // Try multiple paths to handle both dev-built and installed locations
-    const possiblePaths = [
-      path.join(__dirname, '../dist/index.html'),       // Standard: electron/ -> dist/
-      path.join(__dirname, '../../dist/index.html'),     // If electron is nested deeper
-      path.join(process.cwd(), 'dist/index.html'),       // CWD-relative
-    ];
-
-    let loadPath = null;
-    for (const p of possiblePaths) {
-      if (fs.existsSync(p)) {
-        loadPath = p;
-        break;
-      }
-    }
-
-    if (loadPath) {
-      mainWindow.loadFile(loadPath).catch(err => {
-        console.error('Failed to load built app:', err.message);
-      });
-    } else {
-      // Ultimate fallback: try loading from backend server
-      mainWindow.loadURL('http://localhost:8314').catch(err => {
-        console.error('Failed to load from backend:', err.message);
-      });
-    }
+    // Production mode: EXACTLY matching jabber web
+    // The bash wrapper ensures backend is online before this runs!
+    console.log("Loading frontend securely from backend proxy: http://localhost:8314");
+    mainWindow.loadURL('http://localhost:8314').catch(err => {
+      console.error('Failed to connect securely to backend:', err.message);
+    });
   }
 
   // Show window when content is ready — prevents blank flash
