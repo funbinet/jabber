@@ -1,0 +1,5 @@
+rootProject.name = 'jrts'
+
+include 'jrts-core'
+include 'jrts-data'
+include 'jrts-modules'

@@ -1,0 +1,16 @@
+plugins {
+    id 'org.springframework.boot' version '3.4.4' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+allprojects {
+    group = 'com.jabber.jrts'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // Override build directory to avoid root-owned stale artifacts
+    layout.buildDirectory = file("/home/bane/jrts_build/${project.name}")
+}

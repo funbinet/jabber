@@ -1,0 +1,55 @@
+# ===== Build Artifacts =====
+build/
+.gradle/
+*.class
+*.jar
+!gradlew.jar
+
+# ===== Node =====
+node_modules/
+dist/
+.vite/
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ===== Runtime =====
+logs/*.log
+logs/*.pid
+*.pid
+
+# ===== Analysis artifacts =====
+.analysis*.json
+.qodo/
+
+# ===== Packaging build output =====
+packaging/build-deb/
+
+# ===== Database runtime =====
+jrts-data/*.db
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Gradle wrapper cache (user-specific) =====
+.gradle_jrts/
+
+# ===== Dist artifacts =====
+.dist/
+
+# ===== Report outputs (runtime generated) =====
+reports/outputs/*.json
+reports/outputs/*.html
+reports/outputs/*.meta.json
+reports/analysis/
+reports/payloads/
+
+# ===== Screenshots capture tooling =====
+screenshots/node_modules/
+screenshots/package.json
+screenshots/package-lock.json
