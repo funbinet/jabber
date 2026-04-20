@@ -1,3 +1,14 @@
+<p align="center"> <img src="jabber-logo.png" alt="jabber" width="400"/> </p>
+<div align="center">
+
+# JABBER RED TEAMING SUITE (JRTS)
+
+---
+
+**Created by [Funbinet](https://dancan.tech)** · [GitHub](https://github.com/funbinet) · [Codeberg](https://codeberg.org/funbinet)
+
+</div>
+
 # JABBER V3 — Distribution Validation Report
 
 **Generated**: April 19, 2026  
