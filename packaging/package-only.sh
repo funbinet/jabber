@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-# ============================================================
-# JABBER Debian Package Builder - v3.5.0
-# Builds production-ready .deb packages for amd64 and arm64.
-# Usage: ./build-deb.sh [version]
-# ============================================================
+# Quick packaging script using existing JAR and frontend dist
 set -euo pipefail
 
 VERSION="${1:-3.5.0}"
@@ -30,76 +26,88 @@ ok()   { echo -e "${G}[ ok ]${NC} $1" >&2; }
 warn() { echo -e "${Y}[warn]${NC} $1" >&2; }
 die()  { echo -e "${R}[fail]${NC} $1" >&2; exit 1; }
 
-require_cmd() {
-  command -v "$1" >/dev/null 2>&1 || die "Missing required command: $1"
-}
+# Check for existing JAR and dist
+BOOT_JAR="$(find "${PROJECT_ROOT}/jrts-core/build/libs" -maxdepth 1 -type f -name "*.jar" ! -name "*-plain*" | head -n 1)"
+[ -n "${BOOT_JAR}" ] || die "Backend JAR not found"
+[ -d "${PROJECT_ROOT}/jrts-ui/dist" ] || die "Frontend dist not found"
 
+echo ""
+echo -e "${R}============================================================${NC}"
+echo -e "${W} JABBER Packaging Only v3.5.0${NC}"
+echo -e "${W} Version: ${VERSION}${NC}"
+echo -e "${R}============================================================${NC}"
+echo ""
+
+rm -rf "${BUILD_DIR}"
+mkdir -p "${DIST_DIR}"
+
+# Helper functions (from build-deb.sh)
 write_installed_run_sh() {
   local target="$1"
-  cat > "$target" <<EOF
+  cat > "$target" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
 JABBER_HOME="/opt/jabber"
-APP_DATA="\${HOME}/.jabber"
-LOG_DIR="\${APP_DATA}/logs"
+APP_DATA="${HOME}/.jabber"
+LOG_DIR="${APP_DATA}/logs"
 BACKEND_PORT=8314
 
-R='\\033[0;31m'
-G='\\033[0;32m'
-B='\\033[0;34m'
-Y='\\033[1;33m'
-W='\\033[1;37m'
-NC='\\033[0m'
+R='\033[0;31m'
+G='\033[0;32m'
+B='\033[0;34m'
+Y='\033[1;33m'
+W='\033[1;37m'
+NC='\033[0m'
 
-log()  { echo -e "\${B}[\$(date +%H:%M:%S)]\${NC} \$1"; }
-ok()   { echo -e "\${G}[\$(date +%H:%M:%S)] OK\${NC} \$1"; }
-warn() { echo -e "\${Y}[\$(date +%H:%M:%S)] WARN\${NC} \$1"; }
-fail() { echo -e "\${R}[\$(date +%H:%M:%S)] FAIL\${NC} \$1"; }
-die()  { fail "\$1"; exit 1; }
+log()  { echo -e "${B}[$(date +%H:%M:%S)]${NC} $1"; }
+ok()   { echo -e "${G}[$(date +%H:%M:%S)] OK${NC} $1"; }
+warn() { echo -e "${Y}[$(date +%H:%M:%S)] WARN${NC} $1"; }
+fail() { echo -e "${R}[$(date +%H:%M:%S)] FAIL${NC} $1"; }
+die()  { fail "$1"; exit 1; }
 
 pid_running() {
-  [ -n "\${1:-}" ] && kill -0 "\$1" 2>/dev/null
+  [ -n "${1:-}" ] && kill -0 "$1" 2>/dev/null
 }
 
 port_in_use() {
-  lsof -i :"\$1" -sTCP:LISTEN >/dev/null 2>&1
+  lsof -i :"$1" -sTCP:LISTEN >/dev/null 2>&1
 }
 
 start_backend() {
-  mkdir -p "\${APP_DATA}/jrts-data" "\${APP_DATA}/reports" "\${LOG_DIR}"
+  mkdir -p "${APP_DATA}/jrts-data" "${APP_DATA}/reports" "${LOG_DIR}"
 
-  if port_in_use "\${BACKEND_PORT}"; then
-    if curl -sf "http://localhost:\${BACKEND_PORT}/api/info" >/dev/null 2>&1; then
-      ok "Backend already online on port \${BACKEND_PORT}"
+  if port_in_use "${BACKEND_PORT}"; then
+    if curl -sf "http://localhost:${BACKEND_PORT}/api/info" >/dev/null 2>&1; then
+      ok "Backend already online on port ${BACKEND_PORT}"
       return 0
     fi
-    warn "Port \${BACKEND_PORT} in use by non-JABBER process"
+    warn "Port ${BACKEND_PORT} in use by non-JABBER process"
     return 1
   fi
 
-  cd "\${JABBER_HOME}"
-  nohup java -jar "\${JABBER_HOME}/lib/jrts-server.jar" \\
-    --spring.datasource.url="jdbc:h2:file:\${APP_DATA}/jrts-data/jrts-db;DB_CLOSE_ON_EXIT=FALSE" \\
-    --jrts.reports.base-dir="\${APP_DATA}/reports" \\
-    --spring.web.resources.static-locations="file:\${JABBER_HOME}/ui/dist/" \\
-    > "\${LOG_DIR}/backend.log" 2>&1 &
+  cd "${JABBER_HOME}"
+  nohup java -jar "${JABBER_HOME}/lib/jrts-server.jar" \
+    --spring.datasource.url="jdbc:h2:file:${APP_DATA}/jrts-data/jrts-db;DB_CLOSE_ON_EXIT=FALSE" \
+    --jrts.reports.base-dir="${APP_DATA}/reports" \
+    --spring.web.resources.static-locations="file:${JABBER_HOME}/ui/dist/" \
+    > "${LOG_DIR}/backend.log" 2>&1 &
 
-  local pid=\$!
-  echo "\${pid}" > "\${LOG_DIR}/backend.pid"
+  local pid=$!
+  echo "${pid}" > "${LOG_DIR}/backend.pid"
 
   local max=90 i=0
-  while [ \$i -lt \$max ]; do
-    if curl -sf "http://localhost:\${BACKEND_PORT}/api/info" >/dev/null 2>&1; then
-      ok "Backend online on port \${BACKEND_PORT}"
+  while [ $i -lt $max ]; do
+    if curl -sf "http://localhost:${BACKEND_PORT}/api/info" >/dev/null 2>&1; then
+      ok "Backend online on port ${BACKEND_PORT}"
       return 0
     fi
-    if ! pid_running "\${pid}"; then
-      fail "Backend exited early. See \${LOG_DIR}/backend.log"
+    if ! pid_running "${pid}"; then
+      fail "Backend exited early. See ${LOG_DIR}/backend.log"
       return 1
     fi
     sleep 1
-    i=\$((i + 1))
+    i=$((i + 1))
   done
 
   fail "Backend health check timed out"
@@ -107,62 +115,62 @@ start_backend() {
 }
 
 launch_desktop() {
-  local electron_bin="\${JABBER_HOME}/ui/node_modules/electron/dist/electron"
-  if [ ! -x "\${electron_bin}" ]; then
+  local electron_bin="${JABBER_HOME}/ui/node_modules/electron/dist/electron"
+  if [ ! -x "${electron_bin}" ]; then
     die "Electron runtime missing. Reinstall package."
   fi
 
-  nohup "\${electron_bin}" "\${JABBER_HOME}/ui" > "\${LOG_DIR}/desktop.log" 2>&1 &
-  local pid=\$!
-  echo "\${pid}" > "\${LOG_DIR}/desktop.pid"
-  ok "Desktop launched (PID \${pid})"
+  nohup "${electron_bin}" "${JABBER_HOME}/ui" > "${LOG_DIR}/desktop.log" 2>&1 &
+  local pid=$!
+  echo "${pid}" > "${LOG_DIR}/desktop.pid"
+  ok "Desktop launched (PID ${pid})"
 }
 
 open_browser() {
-  local url="http://localhost:\${BACKEND_PORT}"
+  local url="http://localhost:${BACKEND_PORT}"
   if command -v xdg-open >/dev/null 2>&1; then
-    nohup xdg-open "\${url}" >/dev/null 2>&1 &
+    nohup xdg-open "${url}" >/dev/null 2>&1 &
   elif command -v sensible-browser >/dev/null 2>&1; then
-    nohup sensible-browser "\${url}" >/dev/null 2>&1 &
+    nohup sensible-browser "${url}" >/dev/null 2>&1 &
   elif command -v firefox >/dev/null 2>&1; then
-    nohup firefox "\${url}" >/dev/null 2>&1 &
+    nohup firefox "${url}" >/dev/null 2>&1 &
   elif command -v chromium-browser >/dev/null 2>&1; then
-    nohup chromium-browser "\${url}" >/dev/null 2>&1 &
+    nohup chromium-browser "${url}" >/dev/null 2>&1 &
   else
-    warn "No browser launcher found. Open manually: \${url}"
+    warn "No browser launcher found. Open manually: ${url}"
   fi
 }
 
 cleanup() {
-  "\${JABBER_HOME}/stop.sh" >/dev/null 2>&1 || true
+  "${JABBER_HOME}/stop.sh" >/dev/null 2>&1 || true
 }
 trap cleanup SIGINT SIGTERM
 
-mode="\${1:-desk}"
+mode="${1:-desk}"
 
-case "\${mode}" in
+case "${mode}" in
   desk|desktop)
     start_backend || die "Backend failed to start"
     launch_desktop
-    desktop_pid="\$(cat "\${LOG_DIR}/desktop.pid" 2>/dev/null || true)"
-    if [ -n "\${desktop_pid}" ] && pid_running "\${desktop_pid}"; then
-      wait "\${desktop_pid}" || true
-      "\${JABBER_HOME}/stop.sh" >/dev/null 2>&1 || true
+    desktop_pid="$(cat "${LOG_DIR}/desktop.pid" 2>/dev/null || true)"
+    if [ -n "${desktop_pid}" ] && pid_running "${desktop_pid}"; then
+      wait "${desktop_pid}" || true
+      "${JABBER_HOME}/stop.sh" >/dev/null 2>&1 || true
     fi
     ;;
   web|browser)
     start_backend || die "Backend failed to start"
-    ok "Web mode available at http://localhost:\${BACKEND_PORT}"
+    ok "Web mode available at http://localhost:${BACKEND_PORT}"
     open_browser
     while true; do sleep 3600; done
     ;;
   status)
-    if [ -f "\${LOG_DIR}/backend.pid" ] && pid_running "\$(cat "\${LOG_DIR}/backend.pid" 2>/dev/null)"; then
+    if [ -f "${LOG_DIR}/backend.pid" ] && pid_running "$(cat "${LOG_DIR}/backend.pid" 2>/dev/null)"; then
       ok "Backend running"
     else
       warn "Backend not running"
     fi
-    if [ -f "\${LOG_DIR}/desktop.pid" ] && pid_running "\$(cat "\${LOG_DIR}/desktop.pid" 2>/dev/null)"; then
+    if [ -f "${LOG_DIR}/desktop.pid" ] && pid_running "$(cat "${LOG_DIR}/desktop.pid" 2>/dev/null)"; then
       ok "Desktop running"
     else
       warn "Desktop not running"
@@ -298,22 +306,6 @@ fi
 EOF
 }
 
-write_postrm() {
-  local target="$1"
-  cat > "$target" <<'EOF'
-#!/usr/bin/env bash
-set -e
-
-if [ "$1" = "purge" ]; then
-  rm -rf /opt/jabber/logs || true
-fi
-
-if command -v update-desktop-database >/dev/null 2>&1; then
-  update-desktop-database /usr/share/applications/ >/dev/null 2>&1 || true
-fi
-EOF
-}
-
 write_cli_wrapper() {
   local target="$1"
   cat > "$target" <<'EOF'
@@ -364,25 +356,6 @@ StartupNotify=true
 EOF
 }
 
-build_backend_and_frontend() {
-  log "Building backend bootJar"
-  export GRADLE_USER_HOME="${GRADLE_USER_HOME:-/home/$(whoami)/.gradle_jrts}"
-  ./gradlew --project-cache-dir "${GRADLE_USER_HOME}/project_cache" :jrts-core:bootJar -x test --no-daemon
-
-  BOOT_JAR="$(find "${PROJECT_ROOT}/jrts-core/build/libs" -maxdepth 1 -type f -name '*.jar' ! -name '*-plain*' | head -n 1)"
-  [ -n "${BOOT_JAR}" ] || die "Backend JAR not found after build"
-  ok "Backend built: ${BOOT_JAR}"
-
-  log "Building frontend dist"
-  (
-    cd "${PROJECT_ROOT}/jrts-ui"
-    npm ci
-    npm run build
-  )
-  [ -d "${PROJECT_ROOT}/jrts-ui/dist" ] || die "Frontend dist directory missing"
-  ok "Frontend built"
-}
-
 bundle_electron_for_arch() {
   local arch="$1"
   local staging_dir="${BUILD_DIR}/electron-${arch}"
@@ -414,16 +387,25 @@ EOF
   log "Installing Electron ${electron_version} for ${arch} (npm arch: ${npm_arch})"
   (
     cd "${staging_dir}"
-    npm_config_platform=linux npm_config_arch="${npm_arch}" npm install --omit=dev 2>&1 | tail -5 >&2
+    npm_config_platform=linux npm_config_arch="${npm_arch}" npm install --omit=dev --prefer-offline 2>&1 | tail -5 >&2
   )
 
   # Wait a moment for npm to finish writing files
   sleep 1
 
   if [ ! -d "${staging_dir}/node_modules/electron" ]; then
-    die "Electron bundle missing for ${arch} at ${staging_dir}/node_modules/electron"
+    warn "Electron bundle missing for ${arch}, attempting retry with fetch..."
+    (
+      cd "${staging_dir}"
+      npm_config_platform=linux npm_config_arch="${npm_arch}" npm install --omit=dev 2>&1 | tail -5 >&2
+    )
+    sleep 1
   fi
-  ok "Electron bundled for ${arch}"
+
+  if [ ! -d "${staging_dir}/node_modules/electron" ]; then
+    die "Electron bundle failed for ${arch} after retry"
+  fi
+  ok "Electron ${electron_version} bundled for ${arch}"
 
   # Return only the path
   echo "${staging_dir}"
@@ -447,7 +429,7 @@ assemble_package_for_arch() {
 
   cp "${BOOT_JAR}" "${pkg_root}${INSTALL_DIR}/lib/jrts-server.jar"
   cp -r "${PROJECT_ROOT}/jrts-ui/dist/." "${pkg_root}${INSTALL_DIR}/ui/dist/"
-  cp "${PROJECT_ROOT}/jrts-ui/electron/main.cjs" "${pkg_root}${INSTALL_DIR}/ui/electron/main.cjs"
+  cp "${PROJECT_ROOT}/jrts-ui/electron/main.cjs" "${pkg_root}${INSTALL_DIR}/ui/electron/main.cjs" 2>/dev/null || warn "Electron main.cjs not found"
 
   cat > "${pkg_root}${INSTALL_DIR}/ui/package.json" <<EOF
 {
@@ -475,6 +457,21 @@ EOF
   write_control_file "${pkg_root}" "${arch}"
   write_postinst "${pkg_root}/DEBIAN/postinst"
   write_prerm "${pkg_root}/DEBIAN/prerm"
+  write_postrm() {
+    local target="$1"
+    cat > "$target" <<'EOF'
+#!/usr/bin/env bash
+set -e
+
+if [ "$1" = "purge" ]; then
+  rm -rf /opt/jabber/logs || true
+fi
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database /usr/share/applications/ >/dev/null 2>&1 || true
+fi
+EOF
+  }
   write_postrm "${pkg_root}/DEBIAN/postrm"
 
   chmod +x "${pkg_root}${INSTALL_DIR}/run.sh"
@@ -482,42 +479,22 @@ EOF
   chmod +x "${pkg_root}/usr/bin/jabber"
   chmod +x "${pkg_root}/DEBIAN/postinst" "${pkg_root}/DEBIAN/prerm" "${pkg_root}/DEBIAN/postrm"
 
-  dpkg-deb --build "${pkg_root}" "${out_file}" >/dev/null
+  dpkg-deb --build "${pkg_root}" "${out_file}" >/dev/null 2>&1
   ok "Built ${out_file}"
 }
 
-main() {
-  require_cmd dpkg-deb
-  require_cmd node
-  require_cmd npm
-  require_cmd java
+# Main packaging workflow
+echo "[build] Backend JAR: ${BOOT_JAR}"
+echo "[build] Frontend dist: ${PROJECT_ROOT}/jrts-ui/dist"
+echo ""
 
-  echo ""
-  echo -e "${R}============================================================${NC}"
-  echo -e "${W} JABBER Debian Builder v3.5.0${NC}"
-  echo -e "${W} Version: ${VERSION}${NC}"
-  echo -e "${R}============================================================${NC}"
-  echo ""
+for arch in "${ARCHES[@]}"; do
+  log "Preparing package for ${arch}"
+  stage="$(bundle_electron_for_arch "${arch}")"
+  assemble_package_for_arch "${arch}" "${stage}"
+done
 
-  rm -rf "${BUILD_DIR}"
-  mkdir -p "${DIST_DIR}"
-
-  cd "${PROJECT_ROOT}"
-  build_backend_and_frontend
-
-  for arch in "${ARCHES[@]}"; do
-    log "Preparing package for ${arch}"
-    stage="$(bundle_electron_for_arch "${arch}")"
-    assemble_package_for_arch "${arch}" "${stage}"
-  done
-
-  echo ""
-  ok "Debian build complete"
-  ls -lh "${DIST_DIR}"/*.deb
-  echo ""
-  echo "Install examples:"
-  echo "  sudo dpkg -i ${DIST_DIR}/${PACKAGE}_${VERSION}_amd64.deb"
-  echo "  sudo dpkg -i ${DIST_DIR}/${PACKAGE}_${VERSION}_arm64.deb"
-}
-
-main "$@"
+echo ""
+ok "Debian build complete"
+ls -lh "${DIST_DIR}"/*.deb
+echo ""

@@ -3,6 +3,9 @@ import Header from './components/Header.jsx';
 import SideNav from './components/SideNav.jsx';
 import Workspace from './components/Workspace.jsx';
 import StatusBar from './components/StatusBar.jsx';
+import { SessionProvider } from './components/SessionContext.jsx';
+import { TerminalProvider } from './context/TerminalProvider.jsx';
+import InteractiveTerminal from './components/InteractiveTerminal.jsx';
 import { fetchCategories, fetchAllModules, fetchSystemInfo } from './api.js';
 
 const CATEGORY_ICON_MAP = {
@@ -62,7 +65,6 @@ export default function App() {
   }
 
   function handleCategorySelect(catId) {
-    // V3: Reports category opens the Report Manager directly
     if (catId === 'REPORTS') {
       setView('reports');
       setActiveCategory(catId);
@@ -98,37 +100,42 @@ export default function App() {
   }
 
   return (
-    <div className="app-container">
-      <Header isConnected={isConnected} systemInfo={systemInfo} />
-      <div className="app-body">
-        <SideNav
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategorySelect={handleCategorySelect}
-          onHomeClick={handleHomeClick}
-          iconMap={CATEGORY_ICON_MAP}
-        />
-        <Workspace
-          view={view}
-          activeCategory={activeCategory}
-          activeModule={activeModule}
-          categories={categories}
-          modules={activeCategory ? getModulesForCategory(activeCategory) : modules}
-          allModules={modules}
-          systemInfo={systemInfo}
-          isConnected={isConnected}
-          onModuleSelect={handleModuleSelect}
-          onBack={handleBackToCategory}
-          onCategorySelect={handleCategorySelect}
-          onViewChange={handleViewChange}
-          profilerReportIds={profilerReportIds}
-        />
-      </div>
-      <StatusBar
-        isConnected={isConnected}
-        moduleCount={modules.length}
-        categoryCount={categories.length}
-      />
-    </div>
+    <SessionProvider>
+      <TerminalProvider>
+        <div className="app-container">
+          <Header isConnected={isConnected} systemInfo={systemInfo} />
+          <div className="app-body">
+            <SideNav
+              categories={categories}
+              activeCategory={activeCategory}
+              onCategorySelect={handleCategorySelect}
+              onHomeClick={handleHomeClick}
+              iconMap={CATEGORY_ICON_MAP}
+            />
+            <Workspace
+              view={view}
+              activeCategory={activeCategory}
+              activeModule={activeModule}
+              categories={categories}
+              modules={activeCategory ? getModulesForCategory(activeCategory) : modules}
+              allModules={modules}
+              systemInfo={systemInfo}
+              isConnected={isConnected}
+              onModuleSelect={handleModuleSelect}
+              onBack={handleBackToCategory}
+              onCategorySelect={handleCategorySelect}
+              onViewChange={handleViewChange}
+              profilerReportIds={profilerReportIds}
+            />
+          </div>
+          <StatusBar
+            isConnected={isConnected}
+            moduleCount={modules.length}
+            categoryCount={categories.length}
+          />
+          <InteractiveTerminal />
+        </div>
+      </TerminalProvider>
+    </SessionProvider>
   );
 }

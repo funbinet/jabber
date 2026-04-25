@@ -1,8 +1,16 @@
-# JABBER Architecture
+<div align="center">
+
+![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## ARCHITECTURE
+
+</div>
 
 ## Overview
 
-JABBER Red Teaming Suite (JRTS) V3 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
+JABBER Red Teaming Suite (JRTS) V3.5 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
 
 ![Dashboard](screenshots/01_dashboard_overview.png)
 
@@ -10,7 +18,7 @@ JABBER Red Teaming Suite (JRTS) V3 is a production-grade, modular offensive secu
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                      JABBER V3 Platform                        │
+│                    JABBER V3.5 Platform                        │
 ├─────────────┬──────────────────────────┬───────────────────────┤
 │   Frontend  │       Backend            │     Modules           │
 │   (React)   │    (Spring Boot 3)       │  (Java Plugins)       │
@@ -97,7 +105,7 @@ The executor panel provides:
 
 ![Report Manager](screenshots/11_report_manager.png)
 
-V3 Report Manager capabilities:
+V3.5 Report Manager capabilities:
 - Browse, filter, and search reports by target, type, or category
 - View report contents in editor or preview mode
 - Export individual reports or bulk selections

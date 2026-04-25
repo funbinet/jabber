@@ -1,10 +1,12 @@
 <div align="center">
 
-# JABBER Red Teaming Suite (JRTS)
-
-### V3 — Production-Grade • Modular • Enterprise-Ready
-
 ![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## README
+
+### V3.5 — Production-Grade • Modular • Enterprise-Ready
 
 **Created by [Funbinet](https://dancan.tech)** · [GitHub](https://github.com/funbinet) · [Codeberg](https://codeberg.org/funbinet)
 
@@ -16,7 +18,7 @@
 
 ## Overview
 
-JABBER Red Teaming Suite (JRTS) is a **production-grade modular offensive security platform** integrating **209 native security modules** across **19 attack categories** into a unified Java/Spring Boot backend with a premium **React/Electron** dual-mode frontend. V3 introduces unified output management, target profiling, and 30 exploitation modules.
+JABBER Red Teaming Suite (JRTS) is a **production-grade modular offensive security platform** integrating **209 native security modules** across **19 attack categories** into a unified Java/Spring Boot backend with a premium **React/Electron** dual-mode frontend. V3.5 introduces unified output management, target profiling, and 30 exploitation modules.
 
 ## Quick Start
 
@@ -68,7 +70,7 @@ Scrolling reveals every category grouped by attack lifecycle phase:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    JABBER V3 Architecture                     │
+│                  JABBER V3.5 Architecture                     │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │   ┌──────────┐    REST API     ┌──────────────────────┐     │
@@ -161,7 +163,7 @@ Click any module card to open the executor panel with parameter forms, real-time
 
 ## Report Manager
 
-The V3 Report Manager provides browsing, filtering, editing, and export of all module outputs:
+The V3.5 Report Manager provides browsing, filtering, editing, and export of all module outputs:
 
 ![Report Manager](screenshots/11_report_manager.png)
 
@@ -268,9 +270,9 @@ Each category directory contains Java classes implementing `JRTSModuleInterface`
 - ✅ Spring Boot 3 backend on port 8314
 - ✅ React 19 / Vite 8 frontend
 - ✅ Electron 41 desktop wrapper
-- ✅ Unified output management (V3)
-- ✅ Target profiling engine (V3)
-- ✅ 30 exploitation modules (V3)
+- ✅ Unified output management (V3.5)
+- ✅ Target profiling engine (V3.5)
+- ✅ 30 exploitation modules (V3.5)
 - ✅ Report storage with filesystem persistence
 - ✅ Multi-format export (JSON, HTML, CSV, XML, Markdown)
 - ✅ `.deb` package installer with `jabber` CLI command
@@ -292,7 +294,7 @@ See [LICENSE.md](LICENSE.md)
 
 <div align="center">
 
-**JABBER Red Teaming Suite V3** · All Systems Ready ✅  
+**JABBER Red Teaming Suite V3.5** · All Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

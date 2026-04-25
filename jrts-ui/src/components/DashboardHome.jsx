@@ -30,10 +30,10 @@ export default function DashboardHome({ categories, allModules, systemInfo, isCo
       <div className="dashboard-home__hero">
         <div className="dashboard-home__hero-content">
           <h1>JABBER</h1>
-          <h2>Red Teaming Suite V3</h2>
+          <h2>Red Teaming Suite V3.5</h2>
           <p style={{ color: 'var(--steel)', marginTop: '1rem', fontSize: '13px', maxWidth: '600px', margin: '1rem auto 0', lineHeight: 1.7 }}>
             {isConnected
-              ? `Engine online with ${totalModules} native modules across ${activeCategories} active categories. V3 — unified output management, target profiling, and 30 exploitation modules.`
+              ? `Engine online with ${totalModules} native modules across ${activeCategories} active categories. V3.5 — unified output management, target profiling, and 30 exploitation modules.`
               : 'Connecting to JRTS backend engine...'}
           </p>
         </div>

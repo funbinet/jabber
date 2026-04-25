@@ -1,7 +1,15 @@
-# JABBER V3 — Distribution Validation Report
+<div align="center">
 
-**Generated**: April 19, 2026  
-**Version**: 3.0.0  
+![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## DISTRIBUTION VALIDATION REPORT - V3.5
+
+</div>
+
+**Generated**: April 24, 2026  
+**Version**: 3.5.0  
 **Purpose**: Verify that the repository is distribution-ready with complete documentation, correct architecture, and no sensitive leaks.
 
 ---
@@ -12,7 +20,7 @@
 
 | File | Status | Content |
 |------|--------|---------|
-| `README.md` | ✅ | Comprehensive V3 overview with 25 screenshots |
+| `README.md` | ✅ | Comprehensive V3.5 overview with 25 screenshots |
 | `MODULES.md` | ✅ | Complete 209-module catalog |
 | `ARCHITECTURE.md` | ✅ | System architecture with component breakdown |
 | `LICENSE.md` | ✅ | Proprietary license agreement |
@@ -49,7 +57,7 @@ All documented commands verified against current implementation:
 ### ✅ Branding
 
 - All documentation uses "JABBER" as primary name
-- All headers updated to V3
+- All headers updated to V3.5
 - Logo asset: `jabber.png` (1080×1080, 480KB)
 - Dashboard reference: `jabber-dashboard.png` (806×806, 270KB)
 
@@ -76,7 +84,7 @@ Removed stale files:
 
 **Status**: ✅ READY FOR DISTRIBUTION
 
-- [x] All documentation professionally written and V3-aligned
+- [x] All documentation professionally written and V3.5-aligned
 - [x] All commands, ports, and paths verified
 - [x] 25 screenshots embedded at correct resolution
 - [x] Dead code and files removed
@@ -88,7 +96,7 @@ Removed stale files:
 
 <div align="center">
 
-**JABBER V3 — Validated & Approved for Distribution**  
+**JABBER V3.5 — Validated & Approved for Distribution**  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

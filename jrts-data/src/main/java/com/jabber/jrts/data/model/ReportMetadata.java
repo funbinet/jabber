@@ -19,12 +19,14 @@ public class ReportMetadata {
     private long fileSize;
     private String type;         // OUTPUT, PAYLOAD, ANALYSIS
     private List<String> tags;
+    private Map<String, String> attachments;
     private String taskId;
 
     public ReportMetadata() {
         this.id = UUID.randomUUID().toString().substring(0, 8);
         this.timestamp = Instant.now();
         this.tags = new ArrayList<>();
+        this.attachments = new LinkedHashMap<>();
     }
 
     public static ReportMetadata forOutput(ModuleResult result, String format, String filePath) {
@@ -86,6 +88,8 @@ public class ReportMetadata {
     public void setType(String type) { this.type = type; }
     public List<String> getTags() { return tags; }
     public void setTags(List<String> tags) { this.tags = tags; }
+    public Map<String, String> getAttachments() { return attachments; }
+    public void setAttachments(Map<String, String> attachments) { this.attachments = attachments; }
     public String getTaskId() { return taskId; }
     public void setTaskId(String taskId) { this.taskId = taskId; }
 }

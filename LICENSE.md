@@ -1,6 +1,12 @@
-# PROPRIETARY LICENSE AGREEMENT
+<div align="center">
 
-## JABBER Red Teaming Suite (JRTS)
+![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## PROPRIETARY LICENSE AGREEMENT
+
+</div>
 
 **Last Updated**: April 18, 2026  
 **Version**: 1.0  

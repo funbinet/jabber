@@ -60,6 +60,13 @@ export async function fetchTaskProgress(taskId) {
   return res.json();
 }
 
+export async function cancelTask(taskId) {
+  const res = await fetch(`${API_BASE}/tasks/${taskId}/cancel`, {
+    method: 'POST',
+  });
+  return res.json();
+}
+
 export async function generateReport(taskId, format) {
   const res = await fetch(`${API_BASE}/reports/generate/${taskId}`, {
     method: 'POST',
@@ -69,7 +76,7 @@ export async function generateReport(taskId, format) {
   return res.json();
 }
 
-// =============== V3: REPORTS MANAGEMENT ===============
+// =============== V3.5: REPORTS MANAGEMENT ===============
 
 export async function fetchReports(filters = {}) {
   const params = new URLSearchParams();
@@ -138,7 +145,7 @@ export async function fetchReportStats() {
   return res.json();
 }
 
-// =============== V3: TARGET PROFILING ===============
+// =============== V3.5: TARGET PROFILING ===============
 
 export async function generateProfile(reportIds, save = false, format = 'json') {
   const res = await fetch(`${API_BASE}/profiling/generate`, {

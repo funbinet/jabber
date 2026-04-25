@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Unified Launcher v3.1 (development)
+# JABBER Red Teaming Suite — Unified Launcher v3.5.0 (development)
 # Modes:  desk (default)  |  web  |  status
 # Created by Funbinet (dancan.tech)
 # ============================================================
@@ -24,7 +24,7 @@ banner() {
   echo -e "${R}     ╦╔═╗╔╗ ╔╗ ╔═╗╦═╗${NC}"
   echo -e "${R}     ║╠═╣╠╩╗╠╩╗║╣ ╠╦╝${NC}"
   echo -e "${R}    ╚╝╩ ╩╚═╝╚═╝╚═╝╩╚═${NC}"
-  echo -e "${W}    Red Teaming Suite V3.1${NC}"
+  echo -e "${W}    Red Teaming Suite V3.5${NC}"
   echo -e "${C}    Created by Funbinet${NC}"
   echo ""
 }
@@ -249,7 +249,7 @@ case "$MODE" in
 
   *)
     echo ""
-    echo -e "${W}JABBER${NC} — Red Teaming Suite V3.1"
+    echo -e "${W}JABBER${NC} — Red Teaming Suite V3.5"
     echo ""
     echo "Usage: $0 [mode]"
     echo ""

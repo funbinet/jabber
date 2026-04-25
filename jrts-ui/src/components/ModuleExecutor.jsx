@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Play, Download, AlertTriangle, Save, Eye, Code, FileText, Type, CheckCircle } from 'lucide-react';
-import { executeModule, fetchTaskLogs, fetchTaskProgress, fetchTaskResult, generateReport, fetchModuleSchema, saveReport } from '../api.js';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ArrowLeft, Play, Download, AlertTriangle, Save, Eye, Code, FileText, Type, CheckCircle, Square, RotateCcw } from 'lucide-react';
+import { executeModule, fetchTaskLogs, fetchTaskProgress, fetchTaskResult, generateReport, fetchModuleSchema, saveReport, cancelTask } from '../api.js';
+import { useSession } from './SessionContext.jsx';
 
 export default function ModuleExecutor({ module, isConnected, onBack }) {
+  const { saveSession, restoreSession, clearSession } = useSession();
+
   const [formData, setFormData] = useState({});
   const [taskId, setTaskId] = useState(null);
   const [logs, setLogs] = useState([]);
@@ -16,9 +19,60 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
   const [outputView, setOutputView] = useState('json'); // json, html, markdown, raw
   const [saveStatus, setSaveStatus] = useState(null); // null | 'saving' | 'saved' | 'error'
   const [savedInfo, setSavedInfo] = useState(null);
+  const [sessionRestored, setSessionRestored] = useState(false);
   const terminalRef = useRef(null);
   const pollRef = useRef(null);
+  const iframeRef = useRef(null);
 
+  // --- Session Restore on Mount ---
+  useEffect(() => {
+    const saved = restoreSession(module.id);
+    if (saved) {
+      if (saved.formData) setFormData(saved.formData);
+      if (saved.taskId) setTaskId(saved.taskId);
+      if (saved.logs) setLogs(saved.logs);
+      if (saved.progress !== undefined) setProgress(saved.progress);
+      if (saved.status) setStatus(saved.status);
+      if (saved.result) setResult(saved.result);
+      if (saved.reportContent) setReportContent(saved.reportContent);
+      if (saved.reportFormat) setReportFormat(saved.reportFormat);
+      if (saved.outputView) setOutputView(saved.outputView);
+      if (saved.savedInfo) setSavedInfo(saved.savedInfo);
+      if (saved.saveStatus) setSaveStatus(saved.saveStatus);
+      setSessionRestored(true);
+
+      // If task was running, resume polling
+      if (saved.status === 'RUNNING' && saved.taskId && isConnected) {
+        resumePolling(saved.taskId);
+      }
+
+      // Auto-hide restored indicator after 3s
+      setTimeout(() => setSessionRestored(false), 3000);
+    }
+  }, [module.id]);
+
+  // --- Session Save on State Change ---
+  const persistState = useCallback(() => {
+    saveSession(module.id, {
+      formData, taskId, logs, progress, status, result,
+      reportContent, reportFormat, outputView, savedInfo, saveStatus,
+    });
+  }, [module.id, formData, taskId, logs, progress, status, result, reportContent, reportFormat, outputView, savedInfo, saveStatus, saveSession]);
+
+  useEffect(() => {
+    // Debounce session saves
+    const timer = setTimeout(persistState, 300);
+    return () => clearTimeout(timer);
+  }, [persistState]);
+
+  // --- Cleanup on unmount ---
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  // --- Schema Loading ---
   useEffect(() => {
     if (isConnected) {
       fetchModuleSchema(module.id)
@@ -36,15 +90,98 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
     } else if (!module.inputSchema || module.inputSchema.length === 0) {
       setSchemaError(true);
     }
-    return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, [module.id, isConnected]);
 
   useEffect(() => {
     if (terminalRef.current) terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
   }, [logs]);
 
+  useEffect(() => {
+    if (!schema || schema.length === 0) return;
+
+    setFormData(prev => {
+      const next = { ...prev };
+      const modeSchema = schema.find(field => field.name === 'mode' && Array.isArray(field.options) && field.options.length > 0);
+
+      if (modeSchema && !next.mode) {
+        next.mode = modeSchema.defaultValue || modeSchema.options[0] || '';
+      }
+
+      schema.forEach(field => {
+        const current = next[field.name];
+        const unset = current === undefined || current === null || current === '';
+        if (unset && field.defaultValue !== undefined && field.defaultValue !== null && field.defaultValue !== '') {
+          next[field.name] = field.defaultValue;
+        }
+      });
+
+      return next;
+    });
+  }, [schema]);
+
   function handleInputChange(fieldName, value) {
     setFormData(prev => ({ ...prev, [fieldName]: value }));
+  }
+
+  function formatSegmentLabel(value) {
+    return String(value || '').replace(/_/g, ' ');
+  }
+
+  function isFieldVisibleInMode(field, activeMode) {
+    if (!field) return false;
+    if (field.name === 'mode') return true;
+    if (!Array.isArray(field.modes) || field.modes.length === 0) return true;
+    if (!activeMode) return false;
+    return field.modes.includes(activeMode);
+  }
+
+  function handleModeChange(nextMode) {
+    setFormData(prev => {
+      const next = { ...prev, mode: nextMode };
+
+      schema.forEach(field => {
+        if (field.name === 'mode') return;
+        const fieldModes = Array.isArray(field.modes) ? field.modes : [];
+        const modeScoped = fieldModes.length > 0;
+
+        if (modeScoped && !fieldModes.includes(nextMode)) {
+          delete next[field.name];
+          return;
+        }
+
+        const current = next[field.name];
+        const unset = current === undefined || current === null || current === '';
+        if (unset && field.defaultValue !== undefined && field.defaultValue !== null && field.defaultValue !== '') {
+          next[field.name] = field.defaultValue;
+        }
+      });
+
+      return next;
+    });
+  }
+
+  function resumePolling(tid) {
+    if (pollRef.current) clearInterval(pollRef.current);
+    pollRef.current = setInterval(async () => {
+      try {
+        const [logData, progressData] = await Promise.all([
+          fetchTaskLogs(tid),
+          fetchTaskProgress(tid),
+        ]);
+        setLogs(logData);
+        setProgress(progressData.progress);
+        if (progressData.status === 'COMPLETED' || progressData.status === 'FAILED' || progressData.status === 'CANCELLED') {
+          clearInterval(pollRef.current);
+          setStatus(progressData.status);
+          const resultData = await fetchTaskResult(tid);
+          setResult(resultData);
+          try {
+            const report = await generateReport(tid, 'json');
+            setReportContent(report.content);
+          } catch (e) {}
+        }
+      } catch (err) { console.error('Poll error:', err); }
+    }, 500);
   }
 
   async function handleExecute() {
@@ -55,36 +192,51 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
       setProgress(0);
       setSaveStatus(null);
       setSavedInfo(null);
+      setResult(null);
+      setReportContent('');
 
       const response = await executeModule(module.id, formData);
       setTaskId(response.taskId);
       setLogs(prev => [...prev, `[+] Task created: ${response.taskId}`]);
 
-      pollRef.current = setInterval(async () => {
-        try {
-          const [logData, progressData] = await Promise.all([
-            fetchTaskLogs(response.taskId),
-            fetchTaskProgress(response.taskId),
-          ]);
-          setLogs(logData);
-          setProgress(progressData.progress);
-          if (progressData.status === 'COMPLETED' || progressData.status === 'FAILED') {
-            clearInterval(pollRef.current);
-            setStatus(progressData.status);
-            const resultData = await fetchTaskResult(response.taskId);
-            setResult(resultData);
-            // Auto-load JSON view
-            try {
-              const report = await generateReport(response.taskId, 'json');
-              setReportContent(report.content);
-            } catch (e) {}
-          }
-        } catch (err) { console.error('Poll error:', err); }
-      }, 500);
+      resumePolling(response.taskId);
     } catch (err) {
       setStatus('FAILED');
       setLogs(prev => [...prev, `[!] ERROR: ${err.message}`]);
     }
+  }
+
+  async function handleCancel() {
+    if (!taskId) return;
+    try {
+      setLogs(prev => [...prev, '[!] Requesting task cancellation...']);
+      const response = await cancelTask(taskId);
+      if (response.cancelled) {
+        if (pollRef.current) clearInterval(pollRef.current);
+        setStatus('CANCELLED');
+        setProgress(0);
+        setLogs(prev => [...prev, '[!] Task cancelled successfully.']);
+      } else {
+        setLogs(prev => [...prev, `[!] Cancel failed: ${response.reason || 'Unknown'}`]);
+      }
+    } catch (err) {
+      setLogs(prev => [...prev, `[!] Cancel error: ${err.message}`]);
+    }
+  }
+
+  function handleReset() {
+    if (pollRef.current) clearInterval(pollRef.current);
+    setTaskId(null);
+    setLogs([]);
+    setProgress(0);
+    setStatus('IDLE');
+    setResult(null);
+    setReportContent('');
+    setReportFormat('json');
+    setSaveStatus(null);
+    setSavedInfo(null);
+    setOutputView('json');
+    clearSession(module.id);
   }
 
   function simulateExecution() {
@@ -163,9 +315,26 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
     URL.revokeObjectURL(url);
   }
 
-  // Group schema fields
+  // Dynamically resize iframe to fit content
+  function handleIframeLoad() {
+    if (iframeRef.current) {
+      try {
+        const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow?.document;
+        if (doc && doc.body) {
+          const height = Math.max(doc.body.scrollHeight, 400);
+          iframeRef.current.style.height = Math.min(height + 20, 800) + 'px';
+        }
+      } catch {}
+    }
+  }
+
+  const modeField = schema.find(field => field.name === 'mode' && Array.isArray(field.options) && field.options.length > 0);
+  const activeMode = formData.mode || modeField?.defaultValue || modeField?.options?.[0] || '';
+
+  // Group schema fields (mode-aware visibility)
+  const visibleSchema = schema.filter(field => isFieldVisibleInMode(field, activeMode));
   const groups = {};
-  schema.forEach(field => {
+  visibleSchema.forEach(field => {
     const g = field.group || 'General';
     if (!groups[g]) groups[g] = [];
     groups[g].push(field);
@@ -178,6 +347,8 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
     { id: 'txt', label: 'Raw', icon: Type },
   ];
 
+  const isFinished = status === 'COMPLETED' || status === 'FAILED' || status === 'CANCELLED';
+
   return (
     <div className="executor-panel animate-fade-in">
       <div className="executor-panel__header">
@@ -185,9 +356,14 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
           <ArrowLeft size={16} /> Back to modules
         </button>
         <div className="executor-panel__title">{module.name}</div>
-        <span className={`module-card__risk module-card__risk--${module.riskLevel}`}>
-          {module.riskLevel}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {sessionRestored && (
+            <span className="session-indicator">Session restored</span>
+          )}
+          <span className={`module-card__risk module-card__risk--${module.riskLevel}`}>
+            {module.riskLevel}
+          </span>
+        </div>
       </div>
 
       {status === 'RUNNING' && (
@@ -235,7 +411,32 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
                     {field.label}
                     {field.required && <span className="form-group__required">*</span>}
                   </label>
-                  {field.type === 'select' ? (
+                  {field.type === 'select' && field.name === 'mode' && Array.isArray(field.options) && field.options.length > 0 ? (
+                    <div
+                      className="mode-segmented"
+                      style={{ gridTemplateColumns: `repeat(${field.options.length}, minmax(0, 1fr))` }}
+                      role="tablist"
+                      aria-label={`${field.label} mode selector`}
+                      id={`input-${field.name}`}
+                    >
+                      {field.options.map(opt => {
+                        const isActive = activeMode === opt;
+                        return (
+                          <button
+                            type="button"
+                            key={opt}
+                            role="tab"
+                            aria-selected={isActive}
+                            className={`mode-segmented__segment ${isActive ? 'mode-segmented__segment--active' : ''}`}
+                            onClick={() => handleModeChange(opt)}
+                            id={`input-${field.name}-${opt}`}
+                          >
+                            {formatSegmentLabel(opt)}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : field.type === 'select' ? (
                     <select className="form-group__select" value={formData[field.name] || field.defaultValue || ''}
                       onChange={e => handleInputChange(field.name, e.target.value)} id={`input-${field.name}`}>
                       <option value="">-- Select --</option>
@@ -269,13 +470,26 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
             </div>
           ))}
 
-          <div style={{ marginTop: '1.5rem' }}>
-            <button className="btn btn--primary" onClick={handleExecute}
-              disabled={status === 'RUNNING'} id="execute-btn"
-              style={{ width: '100%', justifyContent: 'center' }}>
-              <Play size={14} />
-              {status === 'RUNNING' ? 'Executing...' : 'Execute Module'}
-            </button>
+          <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
+            {status === 'RUNNING' ? (
+              <button className="kill-btn" onClick={handleCancel} id="cancel-btn"
+                style={{ flex: 1, justifyContent: 'center' }}>
+                <Square size={12} /> Stop Execution
+              </button>
+            ) : (
+              <button className="btn btn--primary" onClick={handleExecute}
+                disabled={status === 'RUNNING'} id="execute-btn"
+                style={{ flex: 1, justifyContent: 'center' }}>
+                <Play size={14} />
+                Execute Module
+              </button>
+            )}
+            {isFinished && (
+              <button className="btn btn--secondary" onClick={handleReset}
+                style={{ padding: '0.5rem 0.75rem' }} title="Reset">
+                <RotateCcw size={14} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -292,14 +506,15 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
                 <div key={i} className={`terminal__line ${
                   line.startsWith('[!]') ? 'terminal__line--error' :
                   line.startsWith('[+]') ? 'terminal__line--success' :
-                  line.startsWith('[*]') ? 'terminal__line--info' : ''
+                  line.startsWith('[*]') ? 'terminal__line--info' :
+                  line.startsWith('[~]') ? 'terminal__line--warn' : ''
                 }`}>{line}</div>
               ))
             )}
           </div>
 
-          {/* V3: Output View Tabs + Save/Download */}
-          {status === 'COMPLETED' && (
+          {/* V3.5: Output View Tabs + Save/Download */}
+          {isFinished && (
             <div className="report-panel" style={{ margin: 0 }}>
               <div className="report-panel__toolbar">
                 {/* View Tabs */}
@@ -335,13 +550,26 @@ export default function ModuleExecutor({ module, isConnected, onBack }) {
                   fontFamily: 'var(--font-mono)',
                 }}>
                   ✓ Saved to {savedInfo.filePath?.split('/').pop()} ({savedInfo.fileSize} bytes)
+                  {savedInfo.attachments && Object.keys(savedInfo.attachments).length > 0 && (
+                    <>
+                      <br />
+                      ↳ Attachments: {Object.values(savedInfo.attachments).map(path => path.split('/').pop()).join(', ')}
+                    </>
+                  )}
                 </div>
               )}
 
               {reportContent && (
                 <div className="report-panel__content">
                   {outputView === 'html' ? (
-                    <div dangerouslySetInnerHTML={{ __html: reportContent }} />
+                    <iframe
+                      ref={iframeRef}
+                      srcDoc={reportContent}
+                      sandbox="allow-same-origin"
+                      className="report-iframe"
+                      title="HTML Report Preview"
+                      onLoad={handleIframeLoad}
+                    />
                   ) : (
                     <pre>{reportContent}</pre>
                   )}

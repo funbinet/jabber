@@ -1,5 +1,5 @@
 /* ============================================================
-   JRTS - Jabber Red Teaming Suite V3
+   JRTS - Jabber Red Teaming Suite V3.5
    Premium Responsive Design - Production-Grade UI
    Created by Funbinet (dancan.tech)
    ============================================================ */
@@ -57,7 +57,7 @@
   /* Spacing */
   --sidebar-width: 280px;
   --header-height: 56px;
-  --statusbar-height: 32px;
+  --statusbar-height: 50px;
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -680,6 +680,46 @@ body {
   font-size: 12px;
 }
 
+.mode-segmented {
+  display: grid;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.mode-segmented__segment {
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--steel);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 0.55rem 0.45rem;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.mode-segmented__segment:last-child {
+  border-right: none;
+}
+
+.mode-segmented__segment:hover {
+  color: var(--steel-light);
+  background: rgba(88, 166, 255, 0.06);
+}
+
+.mode-segmented__segment--active {
+  color: white;
+  background: linear-gradient(180deg, rgba(248, 81, 73, 0.18) 0%, rgba(248, 81, 73, 0.12) 100%);
+  box-shadow: inset 0 -2px 0 0 var(--crimson);
+}
+
 .form-group__checkbox {
   display: flex;
   align-items: center;
@@ -856,6 +896,59 @@ body {
   color: var(--crimson);
   transform: scale(1.2);
   filter: drop-shadow(0 0 4px var(--crimson-glow));
+}
+
+/* ===== Status Bar Terminal Button ===== */
+.statusbar__terminal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--gradient-card);
+  color: var(--steel-light);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  line-height: 1;
+}
+
+.statusbar__terminal-btn svg {
+  flex-shrink: 0;
+  stroke-width: 2.5;
+}
+
+.statusbar__terminal-btn:hover:not(:disabled) {
+  color: var(--ice-blue);
+  border-color: var(--ice-blue);
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(88, 166, 255, 0.05) 100%);
+  box-shadow: 0 0 12px var(--crimson-glow), inset 0 0 8px rgba(88, 166, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.statusbar__terminal-btn.is-active {
+  color: var(--ice-blue);
+  border-color: var(--ice-blue);
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.15) 0%, rgba(88, 166, 255, 0.08) 100%);
+  box-shadow: 0 0 16px rgba(88, 166, 255, 0.2), inset 0 0 10px rgba(88, 166, 255, 0.06);
+}
+
+.statusbar__terminal-btn.is-minimized {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: linear-gradient(135deg, rgba(210, 153, 34, 0.1) 0%, rgba(210, 153, 34, 0.05) 100%);
+}
+
+.statusbar__terminal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ===== Dashboard Home ===== */
@@ -1073,7 +1166,7 @@ body {
 }
 
 /* ===============================================================
-   V3: Report Manager Styles
+   V3.5: Report Manager Styles
    =============================================================== */
 
 .report-manager__header {
@@ -1315,7 +1408,7 @@ body {
 }
 
 /* ===============================================================
-   V3: View Tabs (ModuleExecutor output)
+   V3.5: View Tabs (ModuleExecutor output)
    =============================================================== */
 
 .view-tabs {
@@ -1368,7 +1461,7 @@ body {
 }
 
 /* ===============================================================
-   V3: Target Profiler Styles
+   V3.5: Target Profiler Styles
    =============================================================== */
 
 .profiler__header {
@@ -1640,9 +1733,545 @@ body {
   word-break: break-all;
 }
 
-/* ===== V3 Responsive ===== */
+/* ===== V3.5 Responsive ===== */
 @media (max-width: 1024px) {
   .report-manager__body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===============================================================
+   V3.5: Kill Switch Button
+   =============================================================== */
+
+.kill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(248, 81, 73, 0.5);
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.2) 0%, rgba(248, 81, 73, 0.1) 100%);
+  color: #f85149;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.kill-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(248, 81, 73, 0.1) 50%, transparent 100%);
+  animation: kill-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes kill-pulse {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.kill-btn:hover {
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.35) 0%, rgba(248, 81, 73, 0.2) 100%);
+  border-color: #f85149;
+  box-shadow: 0 0 16px rgba(248, 81, 73, 0.25);
+  transform: translateY(-1px);
+}
+
+.kill-btn:active {
+  transform: translateY(0);
+}
+
+/* ===============================================================
+   V3.5: Sandboxed Iframe for HTML Reports
+   =============================================================== */
+
+.report-iframe {
+  width: 100%;
+  min-height: 400px;
+  max-height: 800px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: #0d1117;
+}
+
+.rm-viewer__iframe {
+  width: 100%;
+  min-height: 400px;
+  max-height: 700px;
+  border: none;
+  background: #0d1117;
+}
+
+/* ===============================================================
+   V3.5: Report Manager View Toggle (Rendered / Code)
+   =============================================================== */
+
+.rm-viewer__toggle {
+  display: flex;
+  gap: 1px;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  padding: 2px;
+  border: 1px solid var(--border);
+}
+
+.rm-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--steel);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.rm-toggle-btn:hover {
+  color: var(--steel-light);
+  background: var(--bg-tertiary);
+}
+
+.rm-toggle-btn--active {
+  color: var(--ice-blue) !important;
+  background: var(--bg-elevated) !important;
+  box-shadow: 0 0 6px rgba(88, 166, 255, 0.15);
+}
+
+/* ===============================================================
+   V3.5: Session Restored Indicator
+   =============================================================== */
+
+.session-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--emerald);
+  background: rgba(0, 255, 65, 0.08);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  border-radius: 12px;
+  animation: session-fade 3s ease forwards;
+  white-space: nowrap;
+}
+
+@keyframes session-fade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ===============================================================
+   V3.5: Terminal Warn Line
+   =============================================================== */
+
+.terminal__line--warn {
+  color: var(--amber);
+}
+
+/* ===============================================================
+   PHONE ENUMERATION - Custom execution interface grids
+   =============================================================== */
+
+.action-card-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-card-btn:hover:not(:disabled) {
+  border-color: rgba(88, 166, 255, 0.5);
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+}
+
+.action-card-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.action-card-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-card-btn__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ice-blue);
+  margin-bottom: 4px;
+}
+
+.action-card-btn__desc {
+  font-size: 11px;
+  color: var(--steel);
+  font-family: var(--font-mono);
+}
+
+.action-card-btn__tag {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(210, 153, 34, 0.15);
+  color: var(--amber);
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.prompt-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: prompt-fade-in 0.2s ease-out;
+}
+
+@keyframes prompt-fade-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.active-row td {
+  border-color: rgba(88, 166, 255, 0.3) !important;
+}
+
+.pulsing-indicator {
+  animation: txt-pulse 1.5s infinite;
+}
+
+@keyframes txt-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+/* ============================================================ */
+/* JRTS Terminal Module Window                                   */
+/* ============================================================ */
+
+.jrts-terminal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(3, 8, 14, 0.72);
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal), backdrop-filter var(--transition-normal);
+}
+
+.jrts-terminal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.jrts-terminal-overlay.is-minimized {
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 1.25rem 1.25rem;
+  background: transparent;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.jrts-terminal-panel {
+  width: min(1100px, calc(100% - 2rem));
+  height: min(78vh, 760px);
+  min-width: 560px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #0d131d 0%, #0a1018 100%);
+  border: 1px solid #2a3446;
+  border-radius: 12px;
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(103, 214, 255, 0.08);
+  overflow: hidden;
+  resize: both;
+  pointer-events: auto;
+  transition: transform var(--transition-normal), width var(--transition-normal), height var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.jrts-terminal-panel.is-minimized {
+  width: min(540px, calc(100% - 0.5rem));
+  height: auto;
+  min-height: auto;
+  min-width: 320px;
+  resize: none;
+  border-radius: 10px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.48);
+}
+
+.jrts-terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 0.6rem 0.85rem;
+  background: linear-gradient(180deg, #1b2432 0%, #151e2c 100%);
+  border-bottom: 1px solid #2a3446;
+}
+
+.jrts-terminal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.jrts-terminal-title-icon {
+  color: #67d6ff;
+}
+
+.jrts-terminal-title {
+  color: #f1f5fb;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: 13px;
+}
+
+.jrts-terminal-connection {
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.jrts-terminal-connection.is-connected {
+  color: #8bf2ad;
+  background: rgba(99, 214, 151, 0.18);
+  border-color: rgba(99, 214, 151, 0.4);
+}
+
+.jrts-terminal-connection.is-offline {
+  color: #ff9d9d;
+  background: rgba(255, 111, 111, 0.18);
+  border-color: rgba(255, 111, 111, 0.4);
+}
+
+.jrts-terminal-connection.is-connecting {
+  color: #ffb366;
+  background: rgba(255, 179, 102, 0.18);
+  border-color: rgba(255, 179, 102, 0.4);
+}
+
+.jrts-terminal-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.jrts-terminal-meta-item {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid #2a3446;
+  border-radius: 5px;
+  padding: 0.1rem 0.45rem;
+  color: #8ea4be;
+  background: rgba(9, 15, 23, 0.72);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.jrts-terminal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.jrts-terminal-action-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #2b3750;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #161f2e 0%, #111825 100%);
+  color: #a8b6ca;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+}
+
+.jrts-terminal-action-btn:hover:not(:disabled) {
+  color: #ffffff;
+  border-color: #67d6ff;
+  background: linear-gradient(180deg, #1f2a3d 0%, #182234 100%);
+  transform: translateY(-1px);
+}
+
+.jrts-terminal-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.jrts-terminal-action-btn.danger:hover {
+  color: #ff9d9d;
+  border-color: #d96a6a;
+  background: linear-gradient(180deg, #302026 0%, #261820 100%);
+}
+
+.jrts-terminal-content {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  background: linear-gradient(180deg, #0d131d 0%, #090f18 100%);
+  border-top: 1px solid rgba(103, 214, 255, 0.08);
+  transition: opacity var(--transition-fast), max-height var(--transition-normal), padding var(--transition-normal);
+}
+
+.jrts-terminal-panel.is-minimized .jrts-terminal-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+  border-top: none;
+  pointer-events: none;
+}
+
+.jrts-terminal-scrollback {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  border: 1px solid #223148;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at top right, rgba(103, 214, 255, 0.08) 0%, rgba(103, 214, 255, 0) 40%),
+    linear-gradient(180deg, #09111a 0%, #070d15 100%);
+  box-shadow: inset 0 0 0 1px rgba(103, 214, 255, 0.05);
+}
+
+.jrts-terminal-scrollback .xterm {
+  height: 100%;
+  width: 100%;
+  padding: 0.45rem;
+  font-family: var(--font-mono);
+}
+
+.jrts-terminal-scrollback .xterm-viewport {
+  overflow-y: auto !important;
+}
+
+.jrts-terminal-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #5f728d;
+  border-radius: 5px;
+  background: rgba(11, 18, 27, 0.6);
+  border: 1px solid #1a273a;
+}
+
+.jrts-terminal-feedback {
+  min-height: 18px;
+  border-radius: 6px;
+  border: 1px solid #2d3a52;
+  background: rgba(11, 18, 27, 0.75);
+  color: #8ea4be;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 0.35rem 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .jrts-terminal-overlay {
+    padding: 0.75rem;
+  }
+
+  .jrts-terminal-panel {
+    width: 100%;
+    min-width: 0;
+    min-height: 320px;
+    height: min(80vh, 680px);
+    resize: vertical;
+  }
+
+  .jrts-terminal-meta {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .jrts-terminal-overlay {
+    padding: 0.45rem;
+  }
+
+  .jrts-terminal-panel {
+    width: 100%;
+    height: calc(100% - 0.9rem);
+    min-height: 260px;
+    border-radius: 10px;
+    resize: none;
+  }
+
+  .jrts-terminal-header {
+    padding: 0.5rem 0.55rem;
+  }
+
+  .jrts-terminal-title {
+    font-size: 12px;
+  }
+
+  .jrts-terminal-prompt-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jrts-terminal-run-btn {
+    width: 100%;
+  }
+}
+

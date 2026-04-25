@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.nio.file.*;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 @RestController
 @RequestMapping("/api")
@@ -147,6 +150,7 @@ public class JRTSApiController {
         out.put("normalizedOutput", result.getNormalizedOutput());
         out.put("findings", result.getFindings());
         out.put("logLines", result.getLogLines());
+        out.put("exportedFiles", result.getExportedFiles());
         out.put("artifacts", result.getArtifacts());
         return ResponseEntity.ok(out);
     }
@@ -159,6 +163,12 @@ public class JRTSApiController {
         progress.put("progress", taskEngine.getProgress(taskId));
         progress.put("status", taskEngine.getStatus(taskId));
         return progress;
+    }
+
+    // ===== V3.1: Cancel Task (Kill Switch) =====
+    @PostMapping("/tasks/{taskId}/cancel")
+    public Map<String, Object> cancelTask(@PathVariable String taskId) {
+        return taskEngine.cancelTask(taskId);
     }
 
     // ===== Generate Report (legacy) =====
@@ -219,6 +229,42 @@ public class JRTSApiController {
     }
 
     /**
+     * Download arbitrary artifact from reports directory.
+     */
+    @GetMapping("/reports/download")
+    public ResponseEntity<Resource> downloadArtifact(@RequestParam String path) {
+        try {
+            // Safety measure: sanitize path to prevent directory traversal outside of reports
+            if (path.contains("..")) return ResponseEntity.badRequest().build();
+            
+            Path baseDir = Paths.get(System.getProperty("user.home"), ".gemini", "antigravity", "reports");
+            // If path is absolute, it might already have the prefix, so we check carefully
+            Path file;
+            if (path.startsWith("/")) {
+                file = Paths.get(path);
+            } else {
+                file = baseDir.resolve(path);
+            }
+            
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                String mimeType = Files.probeContentType(file);
+                if (mimeType == null) {
+                    mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+                }
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(mimeType))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
      * Save current task result as a report in specified format.
      */
     @PostMapping("/reports/save")
@@ -239,6 +285,7 @@ public class JRTSApiController {
             response.put("filePath", meta.getFilePath());
             response.put("format", format);
             response.put("fileSize", meta.getFileSize());
+            response.put("attachments", meta.getAttachments());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
@@ -401,6 +448,7 @@ public class JRTSApiController {
         m.put("helpText", f.getHelpText());
         m.put("group", f.getGroup());
         m.put("options", f.getOptions());
+        m.put("modes", f.getModes());
         return m;
     }
 }

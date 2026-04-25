@@ -1,9 +1,17 @@
-# JABBER V3 — Debian Package Guide
+<div align="center">
+
+![JABBER Logo](../jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## DEBIAN PACKAGE GUIDE - V3.5
+
+</div>
 
 ## Overview
 
-This directory contains the Debian packaging pipeline for JABBER V3.  
-The build script produces a `.deb` package that installs the complete platform with the `jabber` command.
+This directory contains the Debian packaging pipeline for JABBER V3.5.  
+The build script produces two `.deb` packages (AMD64 and ARM64) that install the complete platform with the `jabber` command.
 
 ## Build the .deb Package
 
@@ -12,7 +20,9 @@ cd /home/bane/jrts/packaging
 ./build-deb.sh
 ```
 
-Output: `build-deb/jabber_v3.0.0.deb`
+Output:
+- `build-deb/jabber_3.5.0_amd64.deb`
+- `build-deb/jabber_3.5.0_arm64.deb`
 
 ## Package Contents
 
@@ -24,14 +34,14 @@ Output: `build-deb/jabber_v3.0.0.deb`
 | `/opt/jabber/run.sh` | Launcher script |
 | `/opt/jabber/stop.sh` | Shutdown script |
 | `/opt/jabber/logs/` | Runtime logs |
-| `/usr/local/bin/jabber` | Global CLI command |
+| `/usr/bin/jabber` | Global CLI command |
 | `/usr/share/applications/jabber.desktop` | Desktop entry |
 | `/usr/share/pixmaps/jabber.png` | App icon |
 
 ## Installation
 
 ```bash
-sudo dpkg -i jabber_v3.0.0.deb
+sudo dpkg -i jabber_3.5.0_amd64.deb
 ```
 
 ## Usage
@@ -59,14 +69,15 @@ sudo rm -rf /opt/jabber
 
 ## Build Script Details
 
-The `build-deb.sh` script performs 7 phases:
+The `build-deb.sh` script performs 8 phases:
 1. Clean previous build artifacts
 2. Build backend JAR (`gradlew :jrts-core:bootJar`)
 3. Build frontend (`npm ci && npm run build`)
 4. Assemble package structure under `/opt/jabber`
 5. Create DEBIAN control files
 6. Generate CLI wrapper, .desktop entry, maintainer scripts
-7. Build `.deb` with `dpkg-deb`
+7. Generate architecture-specific metadata and maintainer scripts
+8. Build both `.deb` files with `dpkg-deb`
 
 ---
 

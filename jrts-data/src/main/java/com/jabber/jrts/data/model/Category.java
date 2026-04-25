@@ -27,7 +27,8 @@ public enum Category {
 
     SAVED_CREDENTIALS("Saved Credentials", "savedcreds", "Data & Utilities", 17),
     REPORTS("Reports", "reports", "Data & Utilities", 18),
-    UTILITIES("Utilities", "util", "Data & Utilities", 19);
+    UTILITIES("Utilities", "util", "Data & Utilities", 19),
+    PHONE_ENUMERATION("Phone Enumeration", "phoneenum", "Data & Utilities", 20);
 
     private final String displayName;
     private final String slug;

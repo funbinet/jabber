@@ -1,4 +1,12 @@
-# Remote Repositories
+<div align="center">
+
+![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## REMOTE REPOSITORIES
+
+</div>
 
 The project uses the following synchronized upstream git remotes:
 1. **GitHub:** [https://github.com/funbinet/jabber](https://github.com/funbinet/jabber)

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FileText, Trash2, Download, Edit3, Search, Filter, RefreshCw, Eye, Save, X, FolderOpen } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FileText, Trash2, Download, Edit3, Search, Filter, RefreshCw, Eye, Save, X, FolderOpen, Code } from 'lucide-react';
 import { fetchReports, fetchReportContent, editReport, deleteReport, downloadReport, renameReport, fetchReportStats } from '../api.js';
 
 export default function ReportManager({ isConnected, onLaunchProfiler }) {
@@ -12,6 +12,8 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
   const [editContent, setEditContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const [viewMode, setViewMode] = useState('rendered'); // 'rendered' | 'code'
+  const iframeRef = useRef(null);
 
   useEffect(() => { loadReports(); loadStats(); }, []);
 
@@ -33,6 +35,8 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
   async function handleView(report) {
     setSelectedReport(report);
     setIsEditing(false);
+    // Default to rendered view for HTML, code view for everything else
+    setViewMode(isHtmlFormat(report.format) ? 'rendered' : 'code');
     try {
       const content = await fetchReportContent(report.id);
       setReportContent(content || 'No content');
@@ -42,6 +46,7 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
   async function handleEdit() {
     setIsEditing(true);
     setEditContent(reportContent);
+    setViewMode('code'); // Force code view when editing
   }
 
   async function handleSaveEdit() {
@@ -88,8 +93,31 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
     onLaunchProfiler([...selectedIds]);
   }
 
+  function isHtmlFormat(fmt) {
+    return fmt?.toLowerCase() === 'html';
+  }
+
+  function handleIframeLoad() {
+    if (iframeRef.current) {
+      try {
+        const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow?.document;
+        if (doc && doc.body) {
+          const height = Math.max(doc.body.scrollHeight, 400);
+          iframeRef.current.style.height = Math.min(height + 20, 700) + 'px';
+        }
+      } catch {}
+    }
+  }
+
   const typeColors = { OUTPUT: 'var(--ice-blue)', PAYLOAD: 'var(--risk-high)', ANALYSIS: 'var(--emerald)' };
   const isTextFormat = (fmt) => ['json','md','txt','xml','csv','html','markdown'].includes(fmt?.toLowerCase());
+  const formatBadgeColor = (fmt) => {
+    const f = fmt?.toLowerCase();
+    if (f === 'html') return { bg: 'rgba(248,81,73,0.12)', color: '#f85149' };
+    if (f === 'json') return { bg: 'rgba(75,179,253,0.12)', color: '#4bb3fd' };
+    if (f === 'md' || f === 'markdown') return { bg: 'rgba(188,140,255,0.12)', color: '#bc8cff' };
+    return { bg: 'rgba(139,148,158,0.12)', color: '#8b949e' };
+  };
 
   return (
     <div className="report-manager animate-fade-in">
@@ -170,6 +198,10 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
                     <span className="rm-item__badge" style={{background: typeColors[r.type] + '20', color: typeColors[r.type]}}>
                       {r.type}
                     </span>
+                    {r.format && (() => {
+                      const fb = formatBadgeColor(r.format);
+                      return <span className="rm-item__badge" style={{background: fb.bg, color: fb.color}}>.{r.format}</span>;
+                    })()}
                     <span>{r.moduleName || r.moduleId}</span>
                     <span>{r.target && r.target !== 'unknown' ? r.target : ''}</span>
                     <span>{r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
@@ -193,6 +225,25 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
               <div className="rm-viewer__header">
                 <span className="rm-viewer__title">{selectedReport.filePath?.split('/').pop()}</span>
                 <div className="rm-viewer__actions">
+                  {/* Rendered/Code toggle for HTML reports */}
+                  {isHtmlFormat(selectedReport.format) && !isEditing && (
+                    <div className="rm-viewer__toggle">
+                      <button
+                        className={`rm-toggle-btn ${viewMode === 'rendered' ? 'rm-toggle-btn--active' : ''}`}
+                        onClick={() => setViewMode('rendered')}
+                        title="Rendered View"
+                      >
+                        <Eye size={12} /> Rendered
+                      </button>
+                      <button
+                        className={`rm-toggle-btn ${viewMode === 'code' ? 'rm-toggle-btn--active' : ''}`}
+                        onClick={() => setViewMode('code')}
+                        title="Code View"
+                      >
+                        <Code size={12} /> Code
+                      </button>
+                    </div>
+                  )}
                   {isTextFormat(selectedReport.format) && !isEditing && (
                     <button className="btn btn--secondary" onClick={handleEdit} style={{fontSize:'11px'}}>
                       <Edit3 size={12} /> Edit
@@ -217,6 +268,15 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
                 {isEditing ? (
                   <textarea className="rm-editor" value={editContent}
                     onChange={e => setEditContent(e.target.value)} />
+                ) : isHtmlFormat(selectedReport.format) && viewMode === 'rendered' ? (
+                  <iframe
+                    ref={iframeRef}
+                    srcDoc={reportContent}
+                    sandbox="allow-same-origin"
+                    className="rm-viewer__iframe"
+                    title="Report Rendered View"
+                    onLoad={handleIframeLoad}
+                  />
                 ) : (
                   <pre className="rm-viewer__pre">{reportContent}</pre>
                 )}

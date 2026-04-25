@@ -1,6 +1,5 @@
 package com.jabber.jrts.data.model;
 
-import java.time.Instant;
 import java.util.*;
 
 /**
@@ -15,6 +14,7 @@ public class ModuleInputField {
     private String defaultValue;
     private boolean required;
     private List<String> options; // For "select" type
+    private List<String> modes; // Optional mode binding for dynamic field visibility
     private String helpText;
     private String group; // Group label for organizing fields
 
@@ -55,6 +55,18 @@ public class ModuleInputField {
     public ModuleInputField defaultValue(String d) { this.defaultValue = d; return this; }
     public ModuleInputField helpText(String h) { this.helpText = h; return this; }
     public ModuleInputField group(String g) { this.group = g; return this; }
+    public ModuleInputField modes(String... m) {
+        if (m == null || m.length == 0) {
+            this.modes = null;
+        } else {
+            this.modes = List.of(m);
+        }
+        return this;
+    }
+    public ModuleInputField modes(List<String> m) {
+        this.modes = m == null ? null : List.copyOf(m);
+        return this;
+    }
     public ModuleInputField build() { return this; }
 
     // Getters and setters
@@ -72,6 +84,8 @@ public class ModuleInputField {
     public void setRequired(boolean required) { this.required = required; }
     public List<String> getOptions() { return options; }
     public void setOptions(List<String> options) { this.options = options; }
+    public List<String> getModes() { return modes; }
+    public void setModes(List<String> modes) { this.modes = modes; }
     public String getHelpText() { return helpText; }
     public void setHelpText(String helpText) { this.helpText = helpText; }
     public String getGroup() { return group; }

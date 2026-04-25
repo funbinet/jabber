@@ -66,18 +66,32 @@ public class ReportStorageService {
      * Returns the ReportMetadata with the file path populated.
      */
     public ReportMetadata saveOutput(ModuleResult result, String format) throws IOException {
-        String content = reportEngine.generate(result, format);
-        String ext = formatToExtension(format);
+        String normalizedFormat = format == null ? "json" : format.toLowerCase(Locale.ROOT);
+        String content = reportEngine.generate(result, normalizedFormat);
+        String ext = formatToExtension(normalizedFormat);
         String fileName = buildFileName(result.getCategory(), result.getModuleId(),
                 result.getTarget(), ext);
         Path filePath = outputsDir.resolve(fileName);
         Files.writeString(filePath, content, StandardCharsets.UTF_8);
 
-        ReportMetadata meta = ReportMetadata.forOutput(result, format, filePath.toString());
+        // Track generated output path on the in-memory result.
+        if (result.getExportedFiles() != null) {
+            result.getExportedFiles().put(normalizedFormat, filePath.toString());
+        }
+        addArtifactIfAbsent(result, filePath.toString());
+
+        // Persist command/event execution logs as sidecar attachments.
+        Map<String, String> attachments = saveExecutionLogAttachments(result, filePath, normalizedFormat);
+
+        ReportMetadata meta = ReportMetadata.forOutput(result, normalizedFormat, filePath.toString());
+        meta.setAttachments(attachments);
+        if (!attachments.isEmpty()) {
+            meta.getTags().add("execution-log-attached");
+        }
         meta.setFileSize(Files.size(filePath));
         saveMetadata(meta, filePath);
 
-        log.info("Saved output: {} ({})", fileName, format);
+        log.info("Saved output: {} ({})", fileName, normalizedFormat);
         return meta;
     }
 
@@ -216,7 +230,8 @@ public class ReportStorageService {
         Path metaPath = Path.of(filePath + ".meta.json");
         if (Files.exists(metaPath)) {
             String metaJson = Files.readString(metaPath);
-            Map<String, Object> meta = gson.fromJson(metaJson, Map.class);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> meta = (Map<String, Object>) gson.fromJson(metaJson, Map.class);
             meta.put("fileSize", Files.size(filePath));
             Files.writeString(metaPath, gson.toJson(meta));
         }
@@ -236,7 +251,8 @@ public class ReportStorageService {
         Files.move(filePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
         if (Files.exists(metaPath)) {
             String metaJson = Files.readString(metaPath);
-            Map<String, Object> meta = gson.fromJson(metaJson, Map.class);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> meta = (Map<String, Object>) gson.fromJson(metaJson, Map.class);
             meta.put("filePath", newFilePath.toString());
             Files.writeString(newMetaPath, gson.toJson(meta));
             Files.deleteIfExists(metaPath);
@@ -305,6 +321,76 @@ public class ReportStorageService {
             case "txt" -> "txt";
             default -> "json";
         };
+    }
+
+    private Map<String, String> saveExecutionLogAttachments(ModuleResult result, Path outputPath, String reportFormat) throws IOException {
+        Map<String, Object> executionLog = reportEngine.buildExecutionLog(result);
+        @SuppressWarnings("unchecked")
+        List<String> events = executionLog.get("events") instanceof List<?> list
+            ? (List<String>) list
+            : List.of();
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> commands = executionLog.get("commands") instanceof List<?> list
+            ? (List<Map<String, Object>>) list
+            : List.of();
+
+        boolean hasData = (events != null && !events.isEmpty()) || (commands != null && !commands.isEmpty());
+        if (!hasData) {
+            return Map.of();
+        }
+
+        String fileName = outputPath.getFileName().toString();
+        String baseName = stripExtension(fileName);
+        Path jsonLogPath = outputPath.getParent().resolve(baseName + ".execution.json");
+        Path textLogPath = outputPath.getParent().resolve(baseName + ".execution.log");
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("generator", "JABBER Red Teaming Suite v1.0.0");
+        payload.put("timestamp", Instant.now().toString());
+        payload.put("taskId", result.getTaskId());
+        payload.put("moduleId", result.getModuleId());
+        payload.put("reportFile", outputPath.toString());
+        payload.put("reportFormat", reportFormat);
+        payload.put("execution_log", executionLog);
+
+        Files.writeString(jsonLogPath, gson.toJson(payload), StandardCharsets.UTF_8);
+        Files.writeString(textLogPath, reportEngine.generateExecutionLogText(result), StandardCharsets.UTF_8);
+
+        addArtifactIfAbsent(result, jsonLogPath.toString());
+        addArtifactIfAbsent(result, textLogPath.toString());
+        if (result.getExportedFiles() != null) {
+            result.getExportedFiles().put("execution_json", jsonLogPath.toString());
+            result.getExportedFiles().put("execution_log", textLogPath.toString());
+        }
+
+        Map<String, String> attachments = new LinkedHashMap<>();
+        attachments.put("execution_json", jsonLogPath.toString());
+        attachments.put("execution_log", textLogPath.toString());
+        return attachments;
+    }
+
+    private void addArtifactIfAbsent(ModuleResult result, String path) {
+        if (result == null || path == null || path.isBlank()) {
+            return;
+        }
+
+        if (result.getArtifacts() == null) {
+            result.setArtifacts(new ArrayList<>());
+        }
+        if (!result.getArtifacts().contains(path)) {
+            result.getArtifacts().add(path);
+        }
+    }
+
+    private String stripExtension(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return "output";
+        }
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex <= 0) {
+            return fileName;
+        }
+        return fileName.substring(0, dotIndex);
     }
 
     private void saveMetadata(ReportMetadata meta, Path artifactPath) throws IOException {

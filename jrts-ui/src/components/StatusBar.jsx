@@ -1,5 +1,6 @@
 import React from 'react';
-import { Globe, Mail } from 'lucide-react';
+import { Globe, Mail, TerminalSquare } from 'lucide-react';
+import { useTerminal } from '../context/TerminalProvider.jsx';
 
 /* Inline SVG icons for platforms lucide doesn't cover */
 const GitHubIcon = () => (
@@ -15,9 +16,11 @@ const CodebergIcon = () => (
 );
 
 export default function StatusBar({ isConnected, moduleCount, categoryCount }) {
+  const { toggleTerminal, isOpen, isMinimized } = useTerminal();
+
   return (
-    <footer className="statusbar" id="jrts-statusbar">
-      <div className="statusbar__left">
+    <footer className="statusbar relative" id="jrts-statusbar">
+      <div className="statusbar__left flex-1">
         <span className="statusbar__creator">Created by Funbinet</span>
         <div className="statusbar__links">
           <a href="https://dancan.tech" target="_blank" rel="noopener noreferrer"
@@ -38,7 +41,19 @@ export default function StatusBar({ isConnected, moduleCount, categoryCount }) {
           </a>
         </div>
       </div>
-      <div className="statusbar__right">
+      
+      <div className="flex-1 flex justify-center">
+        <button 
+          onClick={toggleTerminal}
+          className={`statusbar__terminal-btn ${isOpen && !isMinimized ? 'is-active' : ''} ${isOpen && isMinimized ? 'is-minimized' : ''}`}
+          title={isOpen ? (isMinimized ? 'Restore Terminal (minimized)' : 'Toggle Terminal') : 'Open Terminal'}
+        >
+          <TerminalSquare size={14} />
+          <span>{isOpen ? (isMinimized ? 'TERMINAL (MIN)' : 'TERMINAL') : 'TERMINAL'}</span>
+        </button>
+      </div>
+
+      <div className="statusbar__right flex-1 justify-end">
         <span>{moduleCount} modules</span>
         <span>|</span>
         <span>{categoryCount} categories</span>

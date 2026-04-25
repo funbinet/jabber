@@ -2,6 +2,7 @@ import React from 'react';
 import DashboardHome from './DashboardHome.jsx';
 import ModuleGrid from './ModuleGrid.jsx';
 import ModuleExecutor from './ModuleExecutor.jsx';
+import DeviceEnumeratorExecutor from './DeviceEnumeratorExecutor.jsx';
 import ReportManager from './ReportManager.jsx';
 import TargetProfiler from './TargetProfiler.jsx';
 
@@ -11,6 +12,13 @@ export default function Workspace({
   onCategorySelect, onViewChange, profilerReportIds
 }) {
   if (view === 'executor' && activeModule) {
+    if (activeModule.category === 'PHONE_ENUMERATION') {
+      return (
+        <main className="workspace" id="jrts-workspace">
+          <DeviceEnumeratorExecutor module={activeModule} isConnected={isConnected} onBack={onBack} />
+        </main>
+      );
+    }
     return (
       <main className="workspace" id="jrts-workspace">
         <ModuleExecutor module={activeModule} isConnected={isConnected} onBack={onBack} />

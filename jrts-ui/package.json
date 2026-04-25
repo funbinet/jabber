@@ -1,6 +1,6 @@
 {
   "name": "jrts-ui",
-  "version": "1.0.0",
+  "version": "3.5.0",
   "description": "JABBER Red Teaming Suite - Electron/React Frontend",
   "main": "electron/main.cjs",
   "scripts": {
@@ -11,10 +11,17 @@
     "electron:build": "vite build && electron-builder",
     "start": "vite"
   },
-  "keywords": ["jrts", "red-team", "security", "cybersecurity"],
+  "keywords": [
+    "jrts",
+    "red-team",
+    "security",
+    "cybersecurity"
+  ],
   "author": "Funbinet (dancan.tech)",
   "license": "PROPRIETARY",
   "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
     "lucide-react": "^1.8.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
@@ -32,7 +39,10 @@
     "appId": "com.jabber.jrts",
     "productName": "JRTS - Jabber Red Teaming Suite",
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "category": "Utility"
     },
     "directories": {

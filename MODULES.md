@@ -1,4 +1,12 @@
-# JABBER Module Catalog — V3
+<div align="center">
+
+![JABBER Logo](jabber.png)
+
+# JABBER RED TEAMING SUITE
+
+## MODULE CATALOG - V3.5
+
+</div>
 
 ## Complete Reference of 209 Modules Across 19 Attack Lifecycle Categories
 
@@ -581,7 +589,7 @@ Every module is executed through a unified executor panel with parameter forms, 
 
 <div align="center">
 
-**JABBER V3: 209 Professional Modules for Enterprise Red Teaming**
+**JABBER V3.5: 209 Professional Modules for Enterprise Red Teaming**
 
 For complete API reference, see the README.md or REST API documentation at `http://localhost:8314/api/`
 
