@@ -78,7 +78,7 @@ export default function TargetProfiler({ isConnected, initialReportIds, onBack }
               <h3>Select Source Reports ({selectedIds.size} selected)</h3>
               <input placeholder="Search reports..." value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="form-group__input" style={{fontSize:'12px', maxWidth:'200px'}} />
+                className="form-group__input" style={{fontSize:'12px', maxWidth:'clamp(200px, 20vw, 400px)'}} />
             </div>
             <div className="profiler__report-list">
               {filteredReports.map(r => (
@@ -94,7 +94,7 @@ export default function TargetProfiler({ isConnected, initialReportIds, onBack }
               ))}
             </div>
             <div style={{marginTop:'1rem', display:'flex', gap:'0.5rem', alignItems:'center'}}>
-              <select className="form-group__select" style={{fontSize:'12px', width:'100px'}} value={profileFormat}
+              <select className="form-group__select" style={{fontSize:'12px', width:'clamp(100px, 15vw, 250px)'}} value={profileFormat}
                 onChange={e => setProfileFormat(e.target.value)}>
                 <option value="json">JSON</option>
                 <option value="md">Markdown</option>

@@ -1,11 +1,8 @@
 <div align="center">
-
-![JABBER Logo](jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## REMOTE REPOSITORIES
-
+  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>REMOTE REPOSITORIES</h3>
 </div>
 
 The project uses the following synchronized upstream git remotes:

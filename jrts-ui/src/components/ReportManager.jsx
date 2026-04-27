@@ -159,7 +159,7 @@ export default function ReportManager({ isConnected, onLaunchProfiler }) {
         </div>
         <input placeholder="Category..." value={filters.category}
           onChange={e => setFilters(p => ({...p, category: e.target.value}))}
-          className="form-group__input" style={{fontSize:'12px', width:'120px'}} />
+          className="form-group__input" style={{fontSize:'12px', width:'clamp(120px, 15vw, 250px)'}} />
         <button className="btn btn--secondary" onClick={loadReports} style={{fontSize:'11px'}}>
           <RefreshCw size={12} /> Refresh
         </button>

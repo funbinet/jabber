@@ -1,11 +1,8 @@
 <div align="center">
-
-![JABBER Logo](jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## PROPRIETARY LICENSE AGREEMENT
-
+  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>PROPRIETARY LICENSE AGREEMENT</h3>
 </div>
 
 **Last Updated**: April 18, 2026  

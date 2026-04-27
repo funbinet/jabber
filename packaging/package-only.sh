@@ -2,7 +2,7 @@
 # Quick packaging script using existing JAR and frontend dist
 set -euo pipefail
 
-VERSION="${1:-3.5.0}"
+VERSION="${1:-4.0.0}"
 PACKAGE="jabber"
 MAINTAINER="Funbinet <admin@dancan.tech>"
 DESCRIPTION="JABBER - Red Teaming Suite"
@@ -33,7 +33,7 @@ BOOT_JAR="$(find "${PROJECT_ROOT}/jrts-core/build/libs" -maxdepth 1 -type f -nam
 
 echo ""
 echo -e "${R}============================================================${NC}"
-echo -e "${W} JABBER Packaging Only v3.5.0${NC}"
+echo -e "${W} JABBER Packaging Only v4.0.0${NC}"
 echo -e "${W} Version: ${VERSION}${NC}"
 echo -e "${R}============================================================${NC}"
 echo ""
@@ -290,7 +290,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
   update-desktop-database /usr/share/applications/ >/dev/null 2>&1 || true
 fi
 
-echo "JABBER ${VERSION:-3.5.0} installed."
+echo "JABBER ${VERSION:-4.0.0} installed."
 EOF
 }
 
@@ -345,7 +345,7 @@ write_desktop_entry() {
   cat > "$target" <<EOF
 [Desktop Entry]
 Name=JABBER
-Comment=JABBER Red Teaming Suite V3.5
+Comment=JABBER Red Teaming Suite V4.0
 Exec=/usr/bin/jabber
 Icon=jabber
 Terminal=false

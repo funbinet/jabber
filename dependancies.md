@@ -1,16 +1,9 @@
 <div align="center">
-
-![JABBER Logo](jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## RUNTIME DEPENDENCIES (RUN.SH) - V3.5
-
+  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>RUNTIME DEPENDENCIES</h3>
 </div>
-
-**Generated**: April 24, 2026  
-**Target**: Clean Linux environment  
-**Scope**: Requirements to run `./run.sh web` or `./run.sh desk`
 
 ---
 
@@ -43,12 +36,8 @@ The launcher starts:
 
 | Tool | Required Version | Why |
 |------|------------------|-----|
-| `java` / `javac` | JDK 21 (recommended) | Backend Gradle toolchain is set to Java 21 |
+| `java` / `javac` | JDK 21 | Backend Gradle toolchain is set to Java 21 |
 | `gradlew` | Included in repo | Starts backend with `:jrts-core:bootRun` |
-
-Notes:
-- `run.sh` error text mentions Java 17 as fallback guidance, but the project configuration is Java 21.
-- Use JDK 21 to avoid toolchain mismatch.
 
 ### Node.js Runtime
 
@@ -124,8 +113,6 @@ sudo apt update
 sudo apt install -y openjdk-21-jdk nodejs npm curl lsof procps xdg-utils
 ```
 
-If desktop mode is required on a minimal image, also install Electron runtime libraries listed above.
-
 ---
 
 ## Important Scope Note
@@ -138,6 +125,7 @@ Individual offensive modules may require additional external tools (for example:
 
 <div align="center">
 
-JABBER V3.5 - `run.sh` dependency baseline validated for clean Linux setup.
+**JABBER Red Teaming Suite V4.0.0** · Baseline Baseline Ready ✅  
+**© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

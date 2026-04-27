@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Search, Package, Lock, Shield, Zap, ArrowUp, Key, Globe,
   Wifi, Network, Users, FileSearch, Radio, GitBranch, Unlock,
-  Server, Wrench, Home, Database, FileText
+  Server, Wrench, Home, Database, FileText, X, Settings, Smartphone
 } from 'lucide-react';
 
 const ICON_COMPONENTS = {
   Search, Package, Lock, Shield, Zap, ArrowUp, Key, Globe,
   Wifi, Network, Users, FileSearch, Radio, GitBranch, Unlock,
-  Server, Wrench, Home, Database, FileText
+  Server, Wrench, Home, Database, FileText, Smartphone
 };
 
 const GROUP_ORDER = [
@@ -19,7 +19,7 @@ const GROUP_ORDER = [
   'Data & Utilities',
 ];
 
-export default function SideNav({ categories, activeCategory, onCategorySelect, onHomeClick, iconMap }) {
+export default function SideNav({ categories, activeCategory, onCategorySelect, onHomeClick, iconMap, isOpen, onClose, view }) {
   function getIcon(catId) {
     const iconName = iconMap?.[catId] || 'Wrench';
     const IconComp = ICON_COMPONENTS[iconName] || Wrench;
@@ -35,15 +35,50 @@ export default function SideNav({ categories, activeCategory, onCategorySelect, 
   });
 
   return (
-    <nav className="sidebar" id="jrts-sidenav">
+    <nav className={`sidebar ${isOpen ? 'sidebar--open' : ''}`} id="jrts-sidenav">
+      {/* Mobile close button */}
+      <button className="sidebar__close-btn" onClick={onClose} aria-label="Close navigation">
+        <X size={20} />
+      </button>
+
       <div className="sidebar__section">
         <div
-          className={`sidebar__item ${!activeCategory ? 'sidebar__item--active' : ''}`}
+          className={`sidebar__item ${!activeCategory && view === 'dashboard' ? 'sidebar__item--active' : ''}`}
           onClick={onHomeClick}
           id="nav-home"
         >
           <Home size={16} className="sidebar__item-icon" />
           <span className="sidebar__item-label">Dashboard</span>
+        </div>
+        <div
+          className={`sidebar__item ${view === 'search' ? 'sidebar__item--active' : ''}`}
+          onClick={() => {
+            if (typeof onCategorySelect === 'function') onCategorySelect('SEARCH');
+            // We need to pass a way to set view to search. Let's assume the parent can handle 'SEARCH' category as view='search'
+            // Wait, App.jsx handleCategorySelect doesn't handle 'SEARCH'. I'll need to update App.jsx too, or pass a new prop.
+          }}
+          id="nav-search"
+        >
+          <Search size={16} className="sidebar__item-icon" />
+          <span className="sidebar__item-label">Search</span>
+        </div>
+        <div
+          className={`sidebar__item ${activeCategory === 'REPORTS' ? 'sidebar__item--active' : ''}`}
+          onClick={() => onCategorySelect('REPORTS')}
+          id="nav-reports"
+        >
+          <FileText size={16} className="sidebar__item-icon" />
+          <span className="sidebar__item-label">Reports</span>
+        </div>
+        <div
+          className={`sidebar__item ${view === 'settings' ? 'sidebar__item--active' : ''}`}
+          onClick={() => {
+            if (typeof onCategorySelect === 'function') onCategorySelect('SETTINGS');
+          }}
+          id="nav-settings"
+        >
+          <Settings size={16} className="sidebar__item-icon" />
+          <span className="sidebar__item-label">Settings</span>
         </div>
       </div>
 
@@ -72,6 +107,12 @@ export default function SideNav({ categories, activeCategory, onCategorySelect, 
           </div>
         );
       })}
+
+      <div className="sidebar__bottom">
+        <div style={{ fontSize: '10px', color: 'var(--steel)', textAlign: 'center', opacity: 0.6 }}>
+          JRTS V4.0 · Funbinet
+        </div>
+      </div>
     </nav>
   );
 }

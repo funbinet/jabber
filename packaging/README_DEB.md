@@ -1,16 +1,15 @@
 <div align="center">
-
-![JABBER Logo](../jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## DEBIAN PACKAGE GUIDE - V3.5
-
+  <img src="../jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>DEBIAN PACKAGE GUIDE</h3>
 </div>
+
+---
 
 ## Overview
 
-This directory contains the Debian packaging pipeline for JABBER V3.5.  
+This directory contains the Debian packaging pipeline for JABBER V4.0.0.  
 The build script produces two `.deb` packages (AMD64 and ARM64) that install the complete platform with the `jabber` command.
 
 ## Build the .deb Package
@@ -21,8 +20,8 @@ cd /home/bane/jrts/packaging
 ```
 
 Output:
-- `build-deb/jabber_3.5.0_amd64.deb`
-- `build-deb/jabber_3.5.0_arm64.deb`
+- `build-deb/jabber_4.0.0_amd64.deb`
+- `build-deb/jabber_4.0.0_arm64.deb`
 
 ## Package Contents
 
@@ -41,7 +40,7 @@ Output:
 ## Installation
 
 ```bash
-sudo dpkg -i jabber_3.5.0_amd64.deb
+sudo dpkg -i jabber_4.0.0_amd64.deb
 ```
 
 ## Usage
@@ -55,9 +54,8 @@ jabber status   # Check service status
 
 ## Dependencies
 
-- `openjdk-21-jre` or `openjdk-17-jre`
-- `nodejs` (>= 18) — recommended
-- `npm` — recommended
+- `openjdk-21-jre`
+- `nodejs` (>= 18)
 
 ## Uninstallation
 
@@ -81,4 +79,9 @@ The `build-deb.sh` script performs 8 phases:
 
 ---
 
+<div align="center">
+
+**JABBER Red Teaming Suite V4.0.0** · Packaging Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
+
+</div>

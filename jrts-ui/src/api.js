@@ -76,7 +76,7 @@ export async function generateReport(taskId, format) {
   return res.json();
 }
 
-// =============== V3.5: REPORTS MANAGEMENT ===============
+// =============== V4.0: REPORTS MANAGEMENT ===============
 
 export async function fetchReports(filters = {}) {
   const params = new URLSearchParams();
@@ -145,7 +145,7 @@ export async function fetchReportStats() {
   return res.json();
 }
 
-// =============== V3.5: TARGET PROFILING ===============
+// =============== V4.0: TARGET PROFILING ===============
 
 export async function generateProfile(reportIds, save = false, format = 'json') {
   const res = await fetch(`${API_BASE}/profiling/generate`, {

@@ -431,7 +431,7 @@ export default function DeviceEnumeratorExecutor({ module, isConnected, onBack }
   const isFinished = status === 'COMPLETED' || status === 'FAILED' || status === 'CANCELLED';
 
   return (
-    <div className="executor-panel animate-fade-in" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="executor-panel animate-fade-in" style={{ width: '100%', maxWidth: '100%' }}>
       <div className="executor-panel__header">
         <button className="executor-panel__back" onClick={onBack}>
           <ArrowLeft size={16} /> Back to modules
@@ -641,7 +641,7 @@ export default function DeviceEnumeratorExecutor({ module, isConnected, onBack }
                 {/* Inline Action Prompt Modal */}
                 {activePromptAction && (
                     <div className="prompt-modal-overlay">
-                        <div className="prompt-modal" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '1.5rem', borderRadius: '8px', width: '400px', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+                        <div className="prompt-modal" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '1.5rem', borderRadius: '8px', width: 'clamp(400px, 40vw, 800px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
                             <h3 style={{ margin: '0 0 0.5rem 0', color: 'white', fontSize: '1.1rem' }}>{activePromptAction.label}</h3>
                             <p style={{ margin: '0 0 1.5rem 0', color: 'var(--steel)', fontSize: '12px' }}>Parameter required for `{activePromptAction.desc}`.</p>
                             

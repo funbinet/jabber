@@ -1,18 +1,15 @@
 <div align="center">
-
-![JABBER Logo](jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## MODULE CATALOG - V3.5
-
+  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>MODULE CATALOG</h3>
 </div>
+
+---
 
 ## Complete Reference of 209 Modules Across 19 Attack Lifecycle Categories
 
 This document provides a comprehensive catalog of all module categories, individual modules, their purposes, risk levels, expected inputs/outputs, and role within the JABBER framework.
-
-![Dashboard](screenshots/01_dashboard_overview.png)
 
 ---
 
@@ -30,8 +27,6 @@ This document provides a comprehensive catalog of all module categories, individ
 ## Intelligence & Planning
 
 ### Category: Reconnaissance
-
-![Reconnaissance](screenshots/04_category_reconnaissance.png)
 
 **Purpose**: Gather information about target environments, enumerate services, discover systems, and map attack surfaces for the red team to identify exploitation opportunities.
 
@@ -136,8 +131,6 @@ This document provides a comprehensive catalog of all module categories, individ
 
 ### Category: Credential Access
 
-![Credential Access](screenshots/06_category_credential_access.png)
-
 **Purpose**: Extract, compromise, or recover credentials (passwords, tokens, certificates) to gain authenticated access to systems and services.
 
 **Expected Workflow**:
@@ -179,8 +172,6 @@ This document provides a comprehensive catalog of all module categories, individ
 ---
 
 ### Category: Exploitation
-
-![Exploitation](screenshots/05_category_exploitation.png)
 
 **Purpose**: Leverage vulnerabilities and misconfigurations to achieve code execution and gain access to systems.
 
@@ -579,17 +570,11 @@ For those interested in extending JABBER with custom modules:
 5. **Package in JAR** — Place in `jrts-modules/` directory
 6. **Restart Backend** — Auto-discovery loads new plugins
 
-## Module Executor
-
-![Module Executor](screenshots/09_module_executor.png)
-
-Every module is executed through a unified executor panel with parameter forms, real-time terminal output, and progress tracking.
-
 ---
 
 <div align="center">
 
-**JABBER V3.5: 209 Professional Modules for Enterprise Red Teaming**
+**JABBER V4.0: 209 Professional Modules for Enterprise Red Teaming**
 
 For complete API reference, see the README.md or REST API documentation at `http://localhost:8314/api/`
 

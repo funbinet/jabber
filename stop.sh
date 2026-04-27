@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Graceful Shutdown v3.5.0
+# JABBER Red Teaming Suite — Graceful Shutdown v4.0.0
 # Created by Funbinet (dancan.tech)
 # ============================================================
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Unified Launcher v3.5.0 (development)
+# JABBER Red Teaming Suite — Unified Launcher v4.0.0 (production)
 # Modes:  desk (default)  |  web  |  status
 # Created by Funbinet (dancan.tech)
 # ============================================================
@@ -13,6 +13,7 @@ BACKEND_PORT=8314
 FRONTEND_PORT=5173
 export GRADLE_USER_HOME="${GRADLE_USER_HOME:-/home/$(whoami)/.gradle_jrts}"
 CACHE_DIR="${GRADLE_USER_HOME}/project_cache"
+export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
 
 # ── Colours ──────────────────────────────────────────────────
 R='\033[0;31m' G='\033[0;32m' B='\033[0;34m' Y='\033[1;33m'
@@ -24,7 +25,7 @@ banner() {
   echo -e "${R}     ╦╔═╗╔╗ ╔╗ ╔═╗╦═╗${NC}"
   echo -e "${R}     ║╠═╣╠╩╗╠╩╗║╣ ╠╦╝${NC}"
   echo -e "${R}    ╚╝╩ ╩╚═╝╚═╝╚═╝╩╚═${NC}"
-  echo -e "${W}    Red Teaming Suite V3.5${NC}"
+  echo -e "${W}    Red Teaming Suite V4.0${NC}"
   echo -e "${C}    Created by Funbinet${NC}"
   echo ""
 }
@@ -64,7 +65,7 @@ start_backend() {
   log "Starting backend on port ${BACKEND_PORT}..."
 
   if port_in_use ${BACKEND_PORT}; then
-    if curl -sf "http://localhost:${BACKEND_PORT}/api/info" > /dev/null 2>&1; then
+    if curl --noproxy "*" -sf "http://127.0.0.1:${BACKEND_PORT}/api/info" > /dev/null 2>&1; then
       ok "Backend already online — port ${BACKEND_PORT}"
       return 0
     fi
@@ -82,7 +83,7 @@ start_backend() {
   # Wait for health endpoint
   local max=90 i=0
   while [ $i -lt $max ]; do
-    if curl -sf "http://localhost:${BACKEND_PORT}/api/info" > /dev/null 2>&1; then
+    if curl --noproxy "*" -sf "http://127.0.0.1:${BACKEND_PORT}/api/info" > /dev/null 2>&1; then
       ok "Backend online — port ${BACKEND_PORT}"
       return 0
     fi
@@ -103,7 +104,7 @@ start_frontend() {
   log "Starting frontend dev server on port ${FRONTEND_PORT}..."
 
   if port_in_use ${FRONTEND_PORT}; then
-    if curl -sf "http://localhost:${FRONTEND_PORT}" > /dev/null 2>&1; then
+    if curl --noproxy "*" -sf "http://127.0.0.1:${FRONTEND_PORT}" > /dev/null 2>&1; then
       ok "Frontend already online — port ${FRONTEND_PORT}"
       return 0
     fi
@@ -121,8 +122,8 @@ start_frontend() {
   # Wait for vite to bind
   local max=60 i=0
   while [ $i -lt $max ]; do
-    if curl -sf "http://localhost:${FRONTEND_PORT}" > /dev/null 2>&1; then
-      ok "Frontend online — http://localhost:${FRONTEND_PORT}"
+    if curl --noproxy "*" -sf "http://127.0.0.1:${FRONTEND_PORT}" > /dev/null 2>&1; then
+      ok "Frontend online — http://127.0.0.1:${FRONTEND_PORT}"
       return 0
     fi
     if ! pid_running "$PID"; then
@@ -154,7 +155,7 @@ launch_desktop() {
 
 # ── Open Browser ─────────────────────────────────────────────
 open_browser() {
-  local url="http://localhost:${FRONTEND_PORT}"
+  local url="http://127.0.0.1:${FRONTEND_PORT}"
   log "Opening browser → ${url}"
   if command -v xdg-open &>/dev/null; then
     nohup xdg-open "$url" > /dev/null 2>&1 &
@@ -249,7 +250,7 @@ case "$MODE" in
 
   *)
     echo ""
-    echo -e "${W}JABBER${NC} — Red Teaming Suite V3.5"
+    echo -e "${W}JABBER${NC} — Red Teaming Suite V4.0"
     echo ""
     echo "Usage: $0 [mode]"
     echo ""

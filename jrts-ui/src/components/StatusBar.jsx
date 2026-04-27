@@ -19,9 +19,9 @@ export default function StatusBar({ isConnected, moduleCount, categoryCount }) {
   const { toggleTerminal, isOpen, isMinimized } = useTerminal();
 
   return (
-    <footer className="statusbar relative" id="jrts-statusbar">
-      <div className="statusbar__left flex-1">
-        <span className="statusbar__creator">Created by Funbinet</span>
+    <footer className="statusbar" id="jrts-statusbar">
+      <div className="statusbar__left">
+        <span className="statusbar__creator desktop-only">Created by Funbinet</span>
         <div className="statusbar__links">
           <a href="https://dancan.tech" target="_blank" rel="noopener noreferrer"
             className="statusbar__link" title="Website">
@@ -41,25 +41,27 @@ export default function StatusBar({ isConnected, moduleCount, categoryCount }) {
           </a>
         </div>
       </div>
-      
-      <div className="flex-1 flex justify-center">
-        <button 
+
+      <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+        <button
           onClick={toggleTerminal}
           className={`statusbar__terminal-btn ${isOpen && !isMinimized ? 'is-active' : ''} ${isOpen && isMinimized ? 'is-minimized' : ''}`}
           title={isOpen ? (isMinimized ? 'Restore Terminal (minimized)' : 'Toggle Terminal') : 'Open Terminal'}
         >
           <TerminalSquare size={14} />
-          <span>{isOpen ? (isMinimized ? 'TERMINAL (MIN)' : 'TERMINAL') : 'TERMINAL'}</span>
+          <span className="desktop-only">{isOpen ? (isMinimized ? 'TERMINAL (MIN)' : 'TERMINAL') : 'TERMINAL'}</span>
         </button>
       </div>
 
-      <div className="statusbar__right flex-1 justify-end">
-        <span>{moduleCount} modules</span>
-        <span>|</span>
-        <span>{categoryCount} categories</span>
-        <span>|</span>
-        <span style={{ color: isConnected ? 'var(--emerald)' : 'var(--risk-critical)' }}>
-          {isConnected ? 'Connected' : 'Offline / Demo'}
+      <div className="statusbar__right">
+        <span className="desktop-only">{moduleCount} modules</span>
+        <span className="desktop-only">|</span>
+        <span className="desktop-only">{categoryCount} categories</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <span className="statusbar__live-dot" />
+          <span style={{ color: isConnected ? 'var(--emerald)' : 'var(--risk-critical)', fontSize: '10px' }}>
+            {isConnected ? 'Online' : 'Offline'}
+          </span>
         </span>
       </div>
     </footer>

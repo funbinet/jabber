@@ -1,24 +1,17 @@
 <div align="center">
-
-![JABBER Logo](jabber.png)
-
-# JABBER RED TEAMING SUITE
-
-## ARCHITECTURE
-
+  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER RED TEAMING SUITE</h1>
+  <br>
+  <h3>ARCHITECTURE</h3>
 </div>
 
-## Overview
-
-JABBER Red Teaming Suite (JRTS) V3.5 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
-
-![Dashboard](screenshots/01_dashboard_overview.png)
+JABBER Red Teaming Suite (JRTS) V4.0.0 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
 
 ## System Architecture
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                    JABBER V3.5 Platform                        │
+│                    JABBER V4.0 Platform                        │
 ├─────────────┬──────────────────────────┬───────────────────────┤
 │   Frontend  │       Backend            │     Modules           │
 │   (React)   │    (Spring Boot 3)       │  (Java Plugins)       │
@@ -56,7 +49,7 @@ JABBER Red Teaming Suite (JRTS) V3.5 is a production-grade, modular offensive se
 
 ### Frontend (`jrts-ui/`)
 
-9 React components providing the full UI:
+The React-based UI handles all user interactions and communicates with the backend via REST.
 
 | Component | Purpose |
 |-----------|---------|
@@ -65,11 +58,9 @@ JABBER Red Teaming Suite (JRTS) V3.5 is a production-grade, modular offensive se
 | `SideNav.jsx` | Category sidebar with module counts |
 | `Workspace.jsx` | Main content router (dashboard/category/executor/reports) |
 | `DashboardHome.jsx` | Hero overview with statistics and category cards |
-| `ModuleGrid.jsx` | Category module card layout |
 | `ModuleExecutor.jsx` | Parameter forms, execution, terminal output |
 | `ReportManager.jsx` | Report browsing, filtering, editing, export |
 | `TargetProfiler.jsx` | Cross-report correlation and profiling |
-| `StatusBar.jsx` | Footer with social links and system status |
 
 ### Desktop (`jrts-ui/electron/`)
 
@@ -93,8 +84,6 @@ User Action → React Component → api.js → REST API (port 8314)
 
 ## Module Executor
 
-![Module Executor](screenshots/09_module_executor.png)
-
 The executor panel provides:
 - **Parameter form** — Dynamically generated from module schema
 - **Terminal output** — Real-time execution logs
@@ -103,9 +92,7 @@ The executor panel provides:
 
 ## Report Manager
 
-![Report Manager](screenshots/11_report_manager.png)
-
-V3.5 Report Manager capabilities:
+V4.0 Report Manager capabilities:
 - Browse, filter, and search reports by target, type, or category
 - View report contents in editor or preview mode
 - Export individual reports or bulk selections
@@ -114,7 +101,7 @@ V3.5 Report Manager capabilities:
 ## Build & Deployment
 
 - **Build System**: Gradle 8 (multi-project: jrts-core, jrts-data, jrts-modules)
-- **Backend**: Java 21, Spring Boot 3.4.4, port 8314
+- **Backend**: Java 21, Spring Boot 3, port 8314
 - **Frontend**: React 19, Vite 8, port 5173
 - **Desktop**: Electron 41
 - **Package**: Debian `.deb` via `packaging/build-deb.sh`
@@ -130,4 +117,9 @@ V3.5 Report Manager capabilities:
 
 ---
 
+<div align="center">
+
+**JABBER Red Teaming Suite V4.0.0** · All Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
+
+</div>
