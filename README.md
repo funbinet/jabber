@@ -1,22 +1,26 @@
 <div align="center">
-  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
-  <br>
-  <h3>V4.0.0 — Production-Grade • Modular • Enterprise-Ready</h3>
-  <p>Created by <b>Funbinet</b> · <a href="https://github.com/funbinet/jabber">GitHub</a> · <a href="https://codeberg.org/funbinet/jabber">Codeberg</a></p>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="120" alt="JABBER Logo">
+  <h1><b>JABBER+</b></h1>
+  <h3>THE OFFENSIVE SECURITY FRAMEWORK</h3>
+  <p><b>Version 5.5.0</b></p>
+  <p>Created by <b>Funbinet</b> · <a href="https://github.com/funbinet/jabber-framework">GitHub</a> · <a href="https://codeberg.org/funbinet/jabber-framework">Codeberg</a></p>
 </div>
 
 ---
 
 ## Overview
 
-JABBER Red Teaming Suite (JRTS) is a **production-grade modular offensive security platform** integrating **209 native security modules** across **19 attack categories** into a unified Java/Spring Boot backend with a premium **React/Electron** dual-mode frontend. V4.0.0 introduces unified output management, target profiling, and 30 exploitation modules with an optimized responsive layout.
+JABBER is a **production-grade modular offensive security platform** integrating **209 native security modules** across **19 attack categories** into a unified Java/Spring Boot backend with a premium **React/Electron** dual-mode frontend.
+
+![JABBER Dashboard](file:///home/bane/.gemini/antigravity/brain/920f970e-2933-4a85-8206-1325488e7cc3/dashboard_screenshot_1777788212891.png)
+
+Version 5.5.0 introduces unified output management, target profiling, and enhanced artifact management with a state-of-the-art responsive UI.
 
 ## Quick Start
 
 ```bash
 # Clone and start (web mode — auto-opens browser)
-cd /home/bane/jrts
+cd /home/bane/jabber
 ./run.sh web
 
 # Desktop mode (Electron window)
@@ -43,15 +47,15 @@ jabber status   # Check service status
 | **Browser Mode** | `./run.sh web` | 5173 → 8314 |
 | **Stop All** | `./stop.sh` | — |
 | **Service Status** | `./run.sh status` | — |
-| **Build Backend** | `./gradlew :jrts-core:bootJar` | — |
-| **Build Frontend** | `cd jrts-ui && npm run build` | — |
+| **Build Backend** | `./gradlew :jabber-core:bootJar` | — |
+| **Build Frontend** | `cd jabber-ui && npm run build` | — |
 | **Build .deb** | `./packaging/build-deb.sh` | — |
 
 ## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                  JABBER V4.0 Architecture                     │
+│                  JABBER V 5.5.0 Architecture                     │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │   ┌──────────┐    REST API     ┌──────────────────────┐     │
@@ -70,7 +74,7 @@ jabber status   # Check service status
 │                                ┌──────────▼───────────┐     │
 │                                │   209 Modules         │     │
 │                                │   (16 packages)       │     │
-│                                │   jrts-modules/       │     │
+│                                │   jabber-modules/       │     │
 │                                └──────────────────────┘     │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -79,11 +83,11 @@ jabber status   # Check service status
 
 | Component | Technology | Location |
 |-----------|-----------|----------|
-| Backend | Java 21, Spring Boot 3 | `jrts-core/` |
-| Modules | Java plugins, 16 category packages | `jrts-modules/` |
-| Data Layer | H2 database, JPA entities | `jrts-data/` |
-| Frontend | React 19, Vite 8, Lucide icons | `jrts-ui/` |
-| Desktop | Electron 41 | `jrts-ui/electron/` |
+| Backend | Java 21, Spring Boot 3 | `jabber-core/` |
+| Modules | Java plugins, 16 category packages | `jabber-modules/` |
+| Data Layer | H2 database, JPA entities | `jabber-data/` |
+| Frontend | React 19, Vite 8, Lucide icons | `jabber-ui/` |
+| Desktop | Electron 41 | `jabber-ui/electron/` |
 | Startup | Bash (run.sh / stop.sh) | Project root |
 | Packaging | Debian .deb builder | `packaging/` |
 | Reports | JSON, HTML, multi-format | `reports/` |
@@ -144,18 +148,18 @@ curl -X POST http://localhost:8314/api/modules/execute \
 ## Project Structure
 
 ```
-jrts/
-├── jrts-core/           # Spring Boot backend
-├── jrts-modules/        # 209 modules (16 packages)
-├── jrts-data/           # H2 database + JPA entities
-├── jrts-ui/             # React/Electron frontend
+jabber/
+├── jabber-core/           # Spring Boot backend
+├── jabber-modules/        # 209 modules (16 packages)
+├── jabber-data/           # H2 database + JPA entities
+├── jabber-ui/             # React/Electron frontend
 ├── reports/             # Module output artifacts
 ├── logs/                # Runtime logs (backend, frontend)
 ├── packaging/           # .deb package builder
 ├── frags/               # Impacket tool collection
 ├── run.sh               # Unified launcher (desk/web)
 ├── stop.sh              # Graceful shutdown
-└── jabber-logo.png      # Brand logo
+└── https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png      # Brand logo
 ```
 
 ## Documentation
@@ -174,9 +178,9 @@ jrts/
 - ✅ Spring Boot 3 backend on port 8314
 - ✅ React 19 / Vite 8 frontend
 - ✅ Electron 41 desktop wrapper
-- ✅ Unified output management (V4.0)
-- ✅ Target profiling engine (V4.0)
-- ✅ 30 exploitation modules (V4.0)
+- ✅ Unified output management (V5.5)
+- ✅ Target profiling engine (V5.5)
+- ✅ 30 exploitation modules (V5.5)
 - ✅ Report storage with filesystem persistence
 - ✅ Multi-format export (JSON, HTML, CSV, XML, Markdown)
 - ✅ `.deb` package installer with `jabber` CLI command
@@ -198,7 +202,7 @@ See [LICENSE.md](LICENSE.md)
 
 <div align="center">
 
-**JABBER Red Teaming Suite V4.0.0** · All Systems Ready ✅  
+**JABBER V 5.5.0** · All Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

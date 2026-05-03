@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER</h1>
   <br>
   <h3>PROPRIETARY LICENSE AGREEMENT</h3>
 </div>
@@ -15,13 +15,13 @@
 
 ### 1.1 License Grant
 
-Funbinet Inc. ("Licensor") grants to the authorized licensee ("Licensee") a **non-exclusive, non-transferable, revocable license** to use JRTS and all associated documentation solely under the terms and conditions of this Agreement.
+Funbinet Inc. ("Licensor") grants to the authorized licensee ("Licensee") a **non-exclusive, non-transferable, revocable license** to use JABBER and all associated documentation solely under the terms and conditions of this Agreement.
 
 **This license is provided AS IS for authorized use within the scope defined herein.**
 
 ### 1.2 Authorized Use
 
-The Licensee may use JRTS **solely for**:
+The Licensee may use JABBER **solely for**:
 - Penetration testing engagements for Licensee's client organizations
 - Internal security assessments within Licensee's organization
 - Red team exercises within Licensee's organization
@@ -39,7 +39,7 @@ The Licensee may use JRTS **solely for**:
 
 ### 2.1 Prohibited Uses
 
-**The Licensee EXPRESSLY FORBIDS the use of JRTS for:**
+**The Licensee EXPRESSLY FORBIDS the use of JABBER for:**
 
 - ❌ **Unauthorized Access** — Accessing systems without explicit written permission
 - ❌ **Data Theft** — Exfiltrating or stealing confidential data
@@ -47,7 +47,7 @@ The Licensee may use JRTS **solely for**:
 - ❌ **Ransom Attacks** — Extortion, encryption-based attacks, or ransom demands
 - ❌ **Espionage** — Industrial espionage, political espionage, or intelligence gathering
 - ❌ **Malicious Intent** — Using tools for criminal, unethical, or harmful purposes
-- ❌ **Commercial Gain** — Selling, leasing, or commercializing JRTS or output
+- ❌ **Commercial Gain** — Selling, leasing, or commercializing JABBER or output
 - ❌ **Competitive Analysis** — Reverse engineering for competitive advantage
 - ❌ **Regulatory Violation** — Violating CFAA, GDPR, HIPAA, PCI-DSS, or equivalent regulations
 
@@ -57,10 +57,10 @@ The Licensee may use JRTS **solely for**:
 
 - ❌ **Reverse Engineer** — Decompile, disassemble, or reverse engineer any component
 - ❌ **Modify Source** — Create derivative works or modified versions
-- ❌ **Redistribute** — Share, sell, rent, lease, or sublicense JRTS
+- ❌ **Redistribute** — Share, sell, rent, lease, or sublicense JABBER
 - ❌ **Remove Notices** — Delete, modify, or obscure copyright/license notices
 - ❌ **Extract Components** — Extract and reuse code, modules, or functionality
-- ❌ **Incorporate Into Products** — Bundle JRTS into Licensee's products or services
+- ❌ **Incorporate Into Products** — Bundle JABBER into Licensee's products or services
 - ❌ **Create Workarounds** — Circumvent licensing controls or restrictions
 - ❌ **Publicly Disclose** — Publish internals, architecture, or implementation details
 
@@ -68,13 +68,13 @@ The Licensee may use JRTS **solely for**:
 
 **The Licensee may NOT:**
 
-- Use JRTS for **more than the authorized number of users** specified in the license grant
-- Use JRTS **beyond the authorized scope** (e.g., personal use vs. commercial)
-- Use JRTS **after license expiration** without renewal
-- Use JRTS **on systems not owned or authorized** by Licensee
-- Use JRTS **without demonstrating authorization** from target system owner
-- Use JRTS in **any automated, batch, or script-driven manner** without express permission
-- Use JRTS to **develop competing products or services**
+- Use JABBER for **more than the authorized number of users** specified in the license grant
+- Use JABBER **beyond the authorized scope** (e.g., personal use vs. commercial)
+- Use JABBER **after license expiration** without renewal
+- Use JABBER **on systems not owned or authorized** by Licensee
+- Use JABBER **without demonstrating authorization** from target system owner
+- Use JABBER in **any automated, batch, or script-driven manner** without express permission
+- Use JABBER to **develop competing products or services**
 
 ---
 
@@ -82,7 +82,7 @@ The Licensee may use JRTS **solely for**:
 
 ### 3.1 Ownership
 
-All intellectual property rights in JRTS, including but not limited to:
+All intellectual property rights in JABBER, including but not limited to:
 - Source code and compiled binaries
 - Documentation and user guides
 - Architecture and design
@@ -96,13 +96,13 @@ All intellectual property rights in JRTS, including but not limited to:
 
 ```
 Copyright © 2026 Funbinet Inc. All Rights Reserved.
-JRTS is a proprietary product of Funbinet Inc.
+JABBER is a proprietary product of Funbinet Inc.
 Unauthorized copying, modification, or distribution is prohibited by law.
 ```
 
 ### 3.3 No License Transfer
 
-Licensee **does not acquire any ownership rights** in JRTS. This is a **license to use**, not a sale of the software.
+Licensee **does not acquire any ownership rights** in JABBER. This is a **license to use**, not a sale of the software.
 
 ---
 
@@ -110,7 +110,7 @@ Licensee **does not acquire any ownership rights** in JRTS. This is a **license 
 
 ### 4.1 Confidential Information
 
-JRTS contains proprietary algorithms, methodologies, and security techniques. **Licensee agrees to maintain strict confidentiality** regarding JRTS internals and not disclose to:
+JABBER contains proprietary algorithms, methodologies, and security techniques. **Licensee agrees to maintain strict confidentiality** regarding JABBER internals and not disclose to:
 - Competitors
 - Unauthorized personnel
 - The general public
@@ -119,14 +119,14 @@ JRTS contains proprietary algorithms, methodologies, and security techniques. **
 ### 4.2 Usage Audit Rights
 
 Licensor reserves the right to:
-- Audit Licensee's use of JRTS for compliance with this Agreement
+- Audit Licensee's use of JABBER for compliance with this Agreement
 - Request documentation proving authorized use
-- Monitor JRTS license compliance periodically
+- Monitor JABBER license compliance periodically
 - Revoke license if violations are discovered
 
 ### 4.3 Data Collection
 
-JRTS may collect **anonymized usage metrics** to improve the product. Licensee acknowledges and consents to:
+JABBER may collect **anonymized usage metrics** to improve the product. Licensee acknowledges and consents to:
 - Non-personally identifiable usage statistics
 - Performance metrics and crash reports
 - Feature usage patterns
@@ -155,7 +155,7 @@ License automatically terminates upon:
 
 Upon termination:
 - **All rights terminate immediately** — Licensee must cease all use
-- **Licensee must destroy** all copies of JRTS in Licensee's possession
+- **Licensee must destroy** all copies of JABBER in Licensee's possession
 - **Documentation must be provided** proving destruction within 30 days
 - **Survival** — Confidentiality obligations survive perpetually
 - **No Refund** — License fees are non-refundable
@@ -176,7 +176,7 @@ The following provisions survive termination indefinitely:
 
 ### 6.1 AS-IS Provision
 
-JRTS is provided **AS IS WITHOUT WARRANTIES OF ANY KIND**, express or implied, including:
+JABBER is provided **AS IS WITHOUT WARRANTIES OF ANY KIND**, express or implied, including:
 - ❌ No warranty of merchantability
 - ❌ No warranty of fitness for a particular purpose
 - ❌ No warranty of non-infringement
@@ -209,7 +209,7 @@ LICENSOR IS NOT RESPONSIBLE FOR:
 ### 7.1 Liability Cap
 
 **Licensor's total liability under this Agreement, for any cause, shall not exceed:**
-- The amount paid by Licensee for JRTS in the preceding 12 months
+- The amount paid by Licensee for JABBER in the preceding 12 months
 - Or $100 USD if no fees were paid
 - **WHICHEVER IS GREATER**
 
@@ -224,8 +224,8 @@ This cap does NOT apply to:
 ### 7.3 Assumption of Risk
 
 **Licensee assumes full risk** of:
-- Using JRTS in production or mission-critical environments
-- Damages resulting from JRTS malfunction
+- Using JABBER in production or mission-critical environments
+- Damages resulting from JABBER malfunction
 - Regulatory consequences of violations
 - Criminal liability for unauthorized use
 
@@ -236,11 +236,11 @@ This cap does NOT apply to:
 ### 8.1 Licensee Indemnification
 
 **Licensee agrees to defend, indemnify, and hold harmless Licensor** from:
-- Claims arising from Licensee's use of JRTS
+- Claims arising from Licensee's use of JABBER
 - Damages from unauthorized access or misuse
 - Violations of laws or regulations
 - Infringement of third-party rights through Licensee's actions
-- Criminal liability arising from JRTS use
+- Criminal liability arising from JABBER use
 
 ### 8.2 Procedure
 
@@ -271,7 +271,7 @@ This Agreement is **governed by the laws** of the jurisdiction where Licensor is
 
 ### 9.3 Export Controls
 
-JRTS may be subject to export controls and economic sanctions regulations. Licensee shall NOT export JRTS to:
+JABBER may be subject to export controls and economic sanctions regulations. Licensee shall NOT export JABBER to:
 - Embargoed countries
 - Sanctioned entities or individuals
 - Parties engaged in weapons development
@@ -317,7 +317,7 @@ If any provision of this Agreement is found **invalid, illegal, or unenforceable
 
 ### 12.1 Entire Agreement
 
-This License Agreement constitutes the **entire agreement** between the parties regarding JRTS and supersedes all prior negotiations, understandings, and agreements, whether oral or written.
+This License Agreement constitutes the **entire agreement** between the parties regarding JABBER and supersedes all prior negotiations, understandings, and agreements, whether oral or written.
 
 ### 12.2 Modifications
 
@@ -370,7 +370,7 @@ Licensee **may not assign, transfer, or sublicense** this Agreement or any right
 
 ### 15.1 Acceptance
 
-**By downloading, installing, or using JRTS, Licensee:**
+**By downloading, installing, or using JABBER, Licensee:**
 - ✓ Acknowledges having read and understood this Agreement
 - ✓ Agrees to be bound by all terms and conditions
 - ✓ Represents having authority to enter this Agreement
@@ -387,11 +387,11 @@ This Agreement is **binding upon** the parties and their **successors, assigns, 
 
 ### 16.1 Key Terms
 
-- **Licensee** — The authorized user(s) or organization granted a license to JRTS
-- **Licensor** — Funbinet Inc., the exclusive owner of JRTS
-- **JRTS** — Jabber Red Teaming Suite, including all versions, releases, updates, documentation
-- **Use** — Installation, execution, operation, or deployment of JRTS
-- **Modification** — Any change to JRTS source code, binaries, or functionality
+- **Licensee** — The authorized user(s) or organization granted a license to JABBER
+- **Licensor** — Funbinet Inc., the exclusive owner of JABBER
+- **JABBER** — JABBER, including all versions, releases, updates, documentation
+- **Use** — Installation, execution, operation, or deployment of JABBER
+- **Modification** — Any change to JABBER source code, binaries, or functionality
 - **Authorized Use** — Use in compliance with this Agreement and applicable law
 - **Breach** — Violation of any material term of this Agreement
 
@@ -415,7 +415,7 @@ This Agreement is **binding upon** the parties and their **successors, assigns, 
 - Deploying ransomware or destructive payloads
 - Taking systems offline without authorization
 - Using for commercial products or services
-- Selling JRTS or sharing with unauthorized parties
+- Selling JABBER or sharing with unauthorized parties
 - Reverse engineering or decompiling source code
 - Criminal hacking or unauthorized access
 - Violating computer fraud laws
@@ -428,11 +428,11 @@ This Agreement is **binding upon** the parties and their **successors, assigns, 
 
 ## PROPRIETARY & CONFIDENTIAL
 
-**JRTS is protected intellectual property of Funbinet Inc.**
+**JABBER is protected intellectual property of Funbinet Inc.**
 
 Unauthorized copying, use, or distribution is prohibited by law and subject to civil and criminal penalties.
 
-By using JRTS, you acknowledge you have read, understood, and agree to be bound by all terms in this Agreement.
+By using JABBER, you acknowledge you have read, understood, and agree to be bound by all terms in this Agreement.
 
 ---
 

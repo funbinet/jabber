@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
-  <br>
-  <h3>MODULE CATALOG</h3>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="120" alt="JABBER Logo">
+  <h1><b>JABBER+</b></h1>
+  <h3>THE OFFENSIVE SECURITY FRAMEWORK</h3>
+  <p><b>Version 5.5.0</b></p>
 </div>
 
 ---
@@ -435,7 +435,7 @@ This document provides a comprehensive catalog of all module categories, individ
 
 ### Input & Output Contract
 
-All JRTS modules follow a standardized I/O pattern:
+All JABBER modules follow a standardized I/O pattern:
 
 #### Standard Input Schema
 
@@ -563,18 +563,18 @@ All JRTS modules follow a standardized I/O pattern:
 
 For those interested in extending JABBER with custom modules:
 
-1. **Implement `JRTSModuleInterface`** — Define inputs and execution logic
-2. **Annotate with `@JRTSModule`** — Register module with framework
+1. **Implement `JABBERModuleInterface`** — Define inputs and execution logic
+2. **Annotate with `@JABBERModule`** — Register module with framework
 3. **Follow Input Schema Standard** — Use 8-field pattern for consistency
 4. **Return Structured Results** — Follow output format specification
-5. **Package in JAR** — Place in `jrts-modules/` directory
+5. **Package in JAR** — Place in `jabber-modules/` directory
 6. **Restart Backend** — Auto-discovery loads new plugins
 
 ---
 
 <div align="center">
 
-**JABBER V4.0: 209 Professional Modules for Enterprise Red Teaming**
+**JABBER V 5.5.0: 209 Professional Modules for Enterprise Red Teaming**
 
 For complete API reference, see the README.md or REST API documentation at `http://localhost:8314/api/`
 

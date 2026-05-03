@@ -18,7 +18,7 @@ dist/
 *~
 
 # ===== Runtime =====
-logs/*.log
+*.log
 *.pid
 
 # ===== Analysis artifacts =====
@@ -29,7 +29,7 @@ logs/*.log
 packaging/build-deb/
 
 # ===== Database runtime =====
-jrts-data/*.db
+jabber-data/*.db
 **/*.mv.db
 **/*.trace.db
 
@@ -38,7 +38,7 @@ jrts-data/*.db
 Thumbs.db
 
 # ===== Gradle wrapper cache (user-specific) =====
-.gradle_jrts/
+.gradle_jabber/
 
 # ===== Dist artifacts =====
 .dist/

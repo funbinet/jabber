@@ -1,24 +1,24 @@
 <div align="center">
-  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
-  <br>
-  <h3>ARCHITECTURE</h3>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="120" alt="JABBER Logo">
+  <h1><b>JABBER+</b></h1>
+  <h3>THE OFFENSIVE SECURITY FRAMEWORK</h3>
+  <p><b>Version 5.5.0</b></p>
 </div>
 
-JABBER Red Teaming Suite (JRTS) V4.0.0 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
+JABBER V 5.5.0 is a production-grade, modular offensive security platform integrating 209 native security modules across 19 attack categories into a unified Java/Spring Boot backend with a dual-mode React/Electron frontend.
 
 ## System Architecture
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                    JABBER V4.0 Platform                        │
+│                    JABBER V 5.5.0 Platform                        │
 ├─────────────┬──────────────────────────┬───────────────────────┤
 │   Frontend  │       Backend            │     Modules           │
 │   (React)   │    (Spring Boot 3)       │  (Java Plugins)       │
 │   Port 5173 │       Port 8314          │                       │
 ├─────────────┤                          │  reconnaissance/      │
 │  Electron   │  ┌────────────────────┐  │  exploitation/        │
-│  Desktop    │  │  JRTSApiController │  │  credential/          │
+│  Desktop    │  │  JABBERApiController │  │  credential/          │
 │  (optional) │  │  PluginRegistry    │  │  wireless/            │
 │             │  │  TaskEngine        │  │  network/             │
 │             │  │  ReportEngine      │  │  privesc/             │
@@ -27,27 +27,27 @@ JABBER Red Teaming Suite (JRTS) V4.0.0 is a production-grade, modular offensive 
 │             │  └────────────────────┘  │  (16 packages total)  │
 ├─────────────┴──────────────────────────┴───────────────────────┤
 │                        Data Layer (H2)                          │
-│                        jrts-data/                               │
+│                        jabber-data/                               │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ## Components
 
-### Backend (`jrts-core/`)
+### Backend (`jabber-core/`)
 
-- **JRTSApplication.java** — Spring Boot entry point
-- **JRTSApiController.java** — Single REST controller handling all `/api/*` endpoints
-- **PluginRegistry.java** — Discovers and loads modules from `jrts-modules/`
+- **JABBERApplication.java** — Spring Boot entry point
+- **JABBERApiController.java** — Single REST controller handling all `/api/*` endpoints
+- **PluginRegistry.java** — Discovers and loads modules from `jabber-modules/`
 - **TaskEngine.java** — Asynchronous module execution with progress tracking
 - **ReportEngine.java** — Multi-format report generation (JSON, HTML, CSV, XML, Markdown)
 - **TargetProfileEngine.java** — Cross-report data correlation and risk scoring
 - **ReportStorageService.java** — Filesystem persistence with structured metadata
 
-### Modules (`jrts-modules/`)
+### Modules (`jabber-modules/`)
 
-209 Java modules implementing `JRTSModuleInterface`, organized into 16 packages by attack category. Each module defines its parameter schema, risk level, and execution logic.
+209 Java modules implementing `JABBERModuleInterface`, organized into 16 packages by attack category. Each module defines its parameter schema, risk level, and execution logic.
 
-### Frontend (`jrts-ui/`)
+### Frontend (`jabber-ui/`)
 
 The React-based UI handles all user interactions and communicates with the backend via REST.
 
@@ -62,7 +62,7 @@ The React-based UI handles all user interactions and communicates with the backe
 | `ReportManager.jsx` | Report browsing, filtering, editing, export |
 | `TargetProfiler.jsx` | Cross-report correlation and profiling |
 
-### Desktop (`jrts-ui/electron/`)
+### Desktop (`jabber-ui/electron/`)
 
 Electron wrapper (`main.cjs`) that loads the React frontend in a native window. Supports both dev mode (Vite URL) and production mode (built artifacts).
 
@@ -92,7 +92,7 @@ The executor panel provides:
 
 ## Report Manager
 
-V4.0 Report Manager capabilities:
+V5.5 Report Manager capabilities:
 - Browse, filter, and search reports by target, type, or category
 - View report contents in editor or preview mode
 - Export individual reports or bulk selections
@@ -100,7 +100,7 @@ V4.0 Report Manager capabilities:
 
 ## Build & Deployment
 
-- **Build System**: Gradle 8 (multi-project: jrts-core, jrts-data, jrts-modules)
+- **Build System**: Gradle 8 (multi-project: jabber-core, jabber-data, jabber-modules)
 - **Backend**: Java 21, Spring Boot 3, port 8314
 - **Frontend**: React 19, Vite 8, port 5173
 - **Desktop**: Electron 41
@@ -119,7 +119,7 @@ V4.0 Report Manager capabilities:
 
 <div align="center">
 
-**JABBER Red Teaming Suite V4.0.0** · All Systems Ready ✅  
+**JABBER V 5.5.0** · All Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

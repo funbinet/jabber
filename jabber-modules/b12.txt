@@ -1,0 +1,9 @@
+HashcatModule
+JohnTheRipperModule
+HashIdentifierModule
+PasswordCrackerModule
+KerbRoastCrackModule
+NTLMCrackModule
+ZIPCrackModule
+MD5CrackerModule
+SHA1BruteModule

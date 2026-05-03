@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="150" alt="JABBER Logo">
+  <h1>JABBER</h1>
   <br>
   <h3>RUNTIME DEPENDENCIES</h3>
 </div>
@@ -37,7 +37,7 @@ The launcher starts:
 | Tool | Required Version | Why |
 |------|------------------|-----|
 | `java` / `javac` | JDK 21 | Backend Gradle toolchain is set to Java 21 |
-| `gradlew` | Included in repo | Starts backend with `:jrts-core:bootRun` |
+| `gradlew` | Included in repo | Starts backend with `:jabber-core:bootRun` |
 
 ### Node.js Runtime
 
@@ -62,7 +62,7 @@ The launcher starts:
 
 | Requirement | Required | Notes |
 |-------------|----------|-------|
-| Electron package | Yes | Installed via `npm ci` in `jrts-ui` |
+| Electron package | Yes | Installed via `npm ci` in `jabber-ui` |
 | Linux GUI session | Yes | X11/Wayland required |
 | Electron runtime libraries | Yes | Common desktop libs required on minimal distros |
 
@@ -80,14 +80,14 @@ sudo apt install -y libgtk-3-0 libnss3 libasound2t64 libxss1 libxtst6 libgbm1
 2. Install frontend dependencies:
 
 ```bash
-cd /home/bane/jrts/jrts-ui
+cd /home/bane/jabber/jabber-ui
 npm ci
 ```
 
 3. Return to project root and run:
 
 ```bash
-cd /home/bane/jrts
+cd /home/bane/jabber
 ./run.sh web
 # or
 ./run.sh desk
@@ -102,7 +102,7 @@ cd /home/bane/jrts
 | Internet access (first run) | Yes | Downloads Gradle distribution + Maven/npm dependencies |
 | Port `8314` free | Yes | Backend service bind |
 | Port `5173` free | Yes | Frontend dev server bind |
-| Write access to home directory | Yes | Gradle cache defaults to `~/.gradle_jrts` |
+| Write access to home directory | Yes | Gradle cache defaults to `~/.gradle_jabber` |
 
 ---
 
@@ -125,7 +125,7 @@ Individual offensive modules may require additional external tools (for example:
 
 <div align="center">
 
-**JABBER Red Teaming Suite V4.0.0** · Baseline Baseline Ready ✅  
+**JABBER V 5.5.0.0** · Baseline Baseline Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>

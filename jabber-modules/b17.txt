@@ -1,0 +1,12 @@
+BrowserCredentialModule
+ChromePassModule
+ApplicationConfigModule
+CredentialVaultModule
+BrowserHistDumpModule
+WifiKeyDumpModule
+CredViewerModule
+CredImportModule
+CredExportModule
+PassAnalyzerModule
+MSFVenumWrapModule
+VaultSyncModule

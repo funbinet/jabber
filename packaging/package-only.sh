@@ -2,10 +2,10 @@
 # Quick packaging script using existing JAR and frontend dist
 set -euo pipefail
 
-VERSION="${1:-4.0.0}"
+VERSION="${1:-5.5.0}"
 PACKAGE="jabber"
 MAINTAINER="Funbinet <admin@dancan.tech>"
-DESCRIPTION="JABBER - Red Teaming Suite"
+DESCRIPTION="JABBER - JABBER"
 INSTALL_DIR="/opt/jabber"
 ARCHES=("amd64" "arm64")
 
@@ -27,13 +27,13 @@ warn() { echo -e "${Y}[warn]${NC} $1" >&2; }
 die()  { echo -e "${R}[fail]${NC} $1" >&2; exit 1; }
 
 # Check for existing JAR and dist
-BOOT_JAR="$(find "${PROJECT_ROOT}/jrts-core/build/libs" -maxdepth 1 -type f -name "*.jar" ! -name "*-plain*" | head -n 1)"
+BOOT_JAR="$(find "${PROJECT_ROOT}/jabber-core/build/libs" -maxdepth 1 -type f -name "*.jar" ! -name "*-plain*" | head -n 1)"
 [ -n "${BOOT_JAR}" ] || die "Backend JAR not found"
-[ -d "${PROJECT_ROOT}/jrts-ui/dist" ] || die "Frontend dist not found"
+[ -d "${PROJECT_ROOT}/jabber-ui/dist" ] || die "Frontend dist not found"
 
 echo ""
 echo -e "${R}============================================================${NC}"
-echo -e "${W} JABBER Packaging Only v4.0.0${NC}"
+echo -e "${W} JABBER Packaging Only V5.5.0${NC}"
 echo -e "${W} Version: ${VERSION}${NC}"
 echo -e "${R}============================================================${NC}"
 echo ""
@@ -75,7 +75,7 @@ port_in_use() {
 }
 
 start_backend() {
-  mkdir -p "${APP_DATA}/jrts-data" "${APP_DATA}/reports" "${LOG_DIR}"
+  mkdir -p "${APP_DATA}/jabber-data" "${APP_DATA}/reports" "${LOG_DIR}"
 
   if port_in_use "${BACKEND_PORT}"; then
     if curl -sf "http://localhost:${BACKEND_PORT}/api/info" >/dev/null 2>&1; then
@@ -87,9 +87,9 @@ start_backend() {
   fi
 
   cd "${JABBER_HOME}"
-  nohup java -jar "${JABBER_HOME}/lib/jrts-server.jar" \
-    --spring.datasource.url="jdbc:h2:file:${APP_DATA}/jrts-data/jrts-db;DB_CLOSE_ON_EXIT=FALSE" \
-    --jrts.reports.base-dir="${APP_DATA}/reports" \
+  nohup java -jar "${JABBER_HOME}/lib/jabber-server.jar" \
+    --spring.datasource.url="jdbc:h2:file:${APP_DATA}/jabber-data/jabber-db;DB_CLOSE_ON_EXIT=FALSE" \
+    --jabber.reports.base-dir="${APP_DATA}/reports" \
     --spring.web.resources.static-locations="file:${JABBER_HOME}/ui/dist/" \
     > "${LOG_DIR}/backend.log" 2>&1 &
 
@@ -222,10 +222,10 @@ stop_by_pidfile backend
 stop_by_pidfile frontend
 stop_by_pidfile desktop
 
-if pgrep -f "jrts-server|jrts-core" >/dev/null 2>&1; then
-  pkill -f "jrts-server|jrts-core" 2>/dev/null || true
+if pgrep -f "jabber-server|jabber-core" >/dev/null 2>&1; then
+  pkill -f "jabber-server|jabber-core" 2>/dev/null || true
   sleep 1
-  pkill -9 -f "jrts-server|jrts-core" 2>/dev/null || true
+  pkill -9 -f "jabber-server|jabber-core" 2>/dev/null || true
 fi
 
 if lsof -i :"${BACKEND_PORT}" -sTCP:LISTEN >/dev/null 2>&1; then
@@ -290,7 +290,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
   update-desktop-database /usr/share/applications/ >/dev/null 2>&1 || true
 fi
 
-echo "JABBER ${VERSION:-4.0.0} installed."
+echo "JABBER ${VERSION:-5.5.0} installed."
 EOF
 }
 
@@ -345,7 +345,7 @@ write_desktop_entry() {
   cat > "$target" <<EOF
 [Desktop Entry]
 Name=JABBER
-Comment=JABBER Red Teaming Suite V4.0
+Comment=JABBER V 5.5.0
 Exec=/usr/bin/jabber
 Icon=jabber
 Terminal=false
@@ -369,7 +369,7 @@ bundle_electron_for_arch() {
     *) die "Unsupported architecture: ${arch}" ;;
   esac
 
-  electron_version="$(node -e "console.log(require('${PROJECT_ROOT}/jrts-ui/package.json').devDependencies.electron.replace('^',''))")"
+  electron_version="$(node -e "console.log(require('${PROJECT_ROOT}/jabber-ui/package.json').devDependencies.electron.replace('^',''))")"
   rm -rf "${staging_dir}"
   mkdir -p "${staging_dir}"
 
@@ -427,27 +427,27 @@ assemble_package_for_arch() {
   mkdir -p "${pkg_root}/usr/share/pixmaps"
   mkdir -p "${pkg_root}/DEBIAN"
 
-  cp "${BOOT_JAR}" "${pkg_root}${INSTALL_DIR}/lib/jrts-server.jar"
-  cp -r "${PROJECT_ROOT}/jrts-ui/dist/." "${pkg_root}${INSTALL_DIR}/ui/dist/"
-  cp "${PROJECT_ROOT}/jrts-ui/electron/main.cjs" "${pkg_root}${INSTALL_DIR}/ui/electron/main.cjs" 2>/dev/null || warn "Electron main.cjs not found"
+  cp "${BOOT_JAR}" "${pkg_root}${INSTALL_DIR}/lib/jabber-server.jar"
+  cp -r "${PROJECT_ROOT}/jabber-ui/dist/." "${pkg_root}${INSTALL_DIR}/ui/dist/"
+  cp "${PROJECT_ROOT}/jabber-ui/electron/main.cjs" "${pkg_root}${INSTALL_DIR}/ui/electron/main.cjs" 2>/dev/null || warn "Electron main.cjs not found"
 
   cat > "${pkg_root}${INSTALL_DIR}/ui/package.json" <<EOF
 {
   "name": "jabber",
   "version": "${VERSION}",
   "main": "electron/main.cjs",
-  "description": "JABBER Red Teaming Suite"
+  "description": "JABBER"
 }
 EOF
 
   cp -r "${electron_stage}/node_modules" "${pkg_root}${INSTALL_DIR}/ui/"
 
-  if [ -f "${PROJECT_ROOT}/jrts-ui/public/jabber.png" ]; then
-    cp "${PROJECT_ROOT}/jrts-ui/public/jabber.png" "${pkg_root}/usr/share/pixmaps/jabber.png"
-    cp "${PROJECT_ROOT}/jrts-ui/public/jabber.png" "${pkg_root}${INSTALL_DIR}/jabber.png"
-  elif [ -f "${PROJECT_ROOT}/jabber.png" ]; then
-    cp "${PROJECT_ROOT}/jabber.png" "${pkg_root}/usr/share/pixmaps/jabber.png"
-    cp "${PROJECT_ROOT}/jabber.png" "${pkg_root}${INSTALL_DIR}/jabber.png"
+  if [ -f "${PROJECT_ROOT}/jabber-ui/publichttps://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" ]; then
+    cp "${PROJECT_ROOT}/jabber-ui/publichttps://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" "${pkg_root}/usr/share/pixmapshttps://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png"
+    cp "${PROJECT_ROOT}/jabber-ui/publichttps://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" "${pkg_root}${INSTALL_DIR}https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png"
+  elif [ -f "${PROJECT_ROOT}https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" ]; then
+    cp "${PROJECT_ROOT}https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" "${pkg_root}/usr/share/pixmapshttps://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png"
+    cp "${PROJECT_ROOT}https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" "${pkg_root}${INSTALL_DIR}https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png"
   fi
 
   write_installed_run_sh "${pkg_root}${INSTALL_DIR}/run.sh"
@@ -485,7 +485,7 @@ EOF
 
 # Main packaging workflow
 echo "[build] Backend JAR: ${BOOT_JAR}"
-echo "[build] Frontend dist: ${PROJECT_ROOT}/jrts-ui/dist"
+echo "[build] Frontend dist: ${PROJECT_ROOT}/jabber-ui/dist"
 echo ""
 
 for arch in "${ARCHES[@]}"; do

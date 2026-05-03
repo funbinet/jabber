@@ -1,0 +1,132 @@
+SSRF Mapper",description="Tests for Server-Side Request Forgery via internal URL injection.
+Cookie Security Analyzer",description="Analyzes cookies for missing Secure, HttpOnly, and SameSite flags.
+CORS Misconfiguration Detector",description="Detects CORS misconfigurations allowing unauthorized cross-domain access.
+GraphQL Scanner",description="Tests GraphQL endpoints for introspection and schema extraction.
+JWT Analyzer",description="Decodes JWT tokens and checks for weak algorithms and missing claims.
+WAF Detector",description="Identifies Web Application Firewalls and tests bypass techniques.
+Kerberos TGT Manager",description="Manages Kerberos TGT and krbtgt operations.
+DSRM Synchronizer",description="Syncs DSRM passwords on domain controllers.
+SPN Registration",description="Registers SPNs for Kerberoasting.
+Kerberoast Cracker",description="Cracks Kerberos TGS tickets.
+Credential Importer",description="Imports credentials from various formats.
+Vault Synchronizer",description="Syncs credentials between vaults.
+Browser History Extractor",description="Extracts browser artifacts and history.
+AD User Creator",description="Creates AD user accounts.
+DPAPI Decryptor",description="Decrypts DPAPI credential blobs.
+MSFvenom Integration",description="Generates MSFvenom payloads.
+Group Membership Manager",description="Adds users to AD security groups.
+WiFi Password Extractor",description="Extracts saved WiFi credentials.
+LSASS Dumper",description="Dumps LSASS for credential extraction.
+Application Config Scanning",description="Extract credentials from application configuration files and environment",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.MEDIUM,sourceRef="ConfigParser",author="JABBER
+Password Analyzer",description="Analyzes password strength and patterns.
+MD5 Cracker",description="Dictionary-based MD5 hash cracker.
+Chrome Credential Extractor",description="Extracts saved Chrome passwords.
+Credential Vault Extraction",description="Extract credentials from Windows Credential Manager vault",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.HIGH,sourceRef="CredVault",author="JABBER
+NTDS.dit Extractor",description="Extracts hashes from AD NTDS.dit.
+SSH Key Harvesting",description="Extract private SSH keys and known_hosts files",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.HIGH,sourceRef="SSHKey",author="JABBER
+NTLM Rainbow Builder",description="NTLM rainbow table generation.
+ZIP Password Cracker",description="Brute-forces ZIP passwords.
+Kerberos TGT Extraction",description="Extract and dump Kerberos TGT tickets from memory",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.HIGH,sourceRef="Kryptonite",author="JABBER
+Credential Viewer",description="Browses stored JABBER credentials.
+Hashcat Wrapper",description="Hashcat integration for hash cracking.
+SAM Dumper",description="Extracts local hashes from SAM hive.
+Browser Credential Extraction",description="Extract stored credentials from web browsers (Chrome, Edge, Firefox)",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.HIGH,sourceRef="BrowserHistory",author="JABBER
+Registry Secrets Dumping",description="Extract credentials and secrets from Windows registry",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.MEDIUM,sourceRef="RegSecrets",author="JABBER
+SHA1 Brute-forcer",description="SHA1 hash cracking via dictionary.
+Credential Exporter",description="Exports credentials for external tools.
+NTLM Hash Dumping",description="Extract NTLM hashes from SAM registry and local accounts",category=Category.CREDENTIAL_ACCESS,riskLevel=RiskLevel.HIGH,sourceRef="SecretsDump",author="JABBER
+GPO Modifier",description="Modifies Group Policy Objects for persistence.
+MAC Spoofer",description="Changes interface MAC for NAC bypass testing.
+BGP Route Analyzer",description="Analyzes BGP routing for hijacking potential.
+SYN Flood Simulator",description="TCP SYN flood stress testing tool.
+STP BPDU Analyzer",description="Tests STP for BPDU guard vulnerabilities.
+DHCP Starvation Tester",description="Tests DHCP pool exhaustion vulnerability.
+VLAN Enumerator",description="Discovers VLAN configurations via 802.1Q analysis.
+Bind Shell Generator",description="Creates bind shell payloads.
+Polymorphic Engine",description="Generates polymorphic payload variants.
+Code Obfuscator",description="Applies obfuscation to evade detection.
+Payload Dropper",description="Creates staged download-execute droppers.
+Shellcode Generator",description="Generate raw shellcode with optional C2 callback integration (x86/x64)",category=Category.PAYLOAD_CREATION,riskLevel=RiskLevel.HIGH,sourceRef="Metasploit",author="JABBER
+Sleep Mask Generator",description="Creates sleep-masking evasion payloads.
+C2 Beacon Generator",description="Generate beacons with encrypted C2 callbacks, embedded staging, and persistence",category=Category.PAYLOAD_CREATION,riskLevel=RiskLevel.CRITICAL,sourceRef="Cobalt Strike",author="JABBER
+Reverse Shell Generator",description="Generates reverse shells in multiple languages.
+Format Converter",description="Convert payloads between executable formats (EXE, DLL, PS1, ELF, Mach-O, VBS, VBE)",category=Category.PAYLOAD_CREATION,riskLevel=RiskLevel.HIGH,sourceRef="PoC",author="JABBER
+Beacon Flood Generator",description="Generates 802.11 beacon frames for wireless stress testing.
+WPA Handshake Analyzer",description="Analyzes WPA handshake captures for cracking readiness.
+Pixie Dust Analyzer",description="Analyzes WPS exchanges for offline Pixie Dust feasibility.
+Deauth Frame Builder",description="Constructs 802.11 deauthentication frames for disconnection testing.
+Evil Twin Configurator",description="Configures rogue access points for evil twin attacks.
+WPS PIN Calculator",description="Computes WPS PINs from BSSID patterns for WPS testing.
+SSL Certificate Inspector",description="Inspects SSL/TLS certificates for expiration, weak algorithms, and chain issues.
+SMB Null Session Checker",description="Tests for SMB null session vulnerabilities via anonymous connection attempts.
+Service Version Detector",description="Banner-grabs services to identify software versions for vulnerability correlation.
+Anonymous FTP Checker",description="Tests FTP servers for anonymous login access.
+HTTP Security Header Analyzer",description="Checks HTTP response headers for missing security controls and misconfigurations.
+Directory Brute-forcer",description="Discovers hidden web paths and admin panels via HTTP brute-forcing.
+Buffer Overflow Builder",description="Generates buffer overflow payloads with configurable offsets and NOP sleds.
+Remote Code Exec Tester",description="Tests parameters for OS command injection vulnerabilities with multiple payload variants.
+XSS Scanner",description="Tests reflected XSS injection points in web application parameters.
+Command Injection Tester",description="Tests web parameters for OS command injection vulnerabilities.
+SQL Injection Tester",description="Automated SQLi testing with error-based, blind, and time-based detection payloads.
+Log4Shell Scanner",description="Tests for CVE-2021-44228 Log4Shell JNDI injection across HTTP headers.
+Windows Service Exploit",description="Exploit Windows service misconfigurations",category=Category.PRIVILEGE_ESCALATION,riskLevel=RiskLevel.CRITICAL,sourceRef="Unquoted paths",author="JABBER
+PATH Interception Finder",description="Finds PATH interception and DLL hijack vectors.
+Cron Job Analyzer",description="Identifies writable cron jobs for privesc.
+Windows Token Impersonation",description="Impersonate Windows tokens",category=Category.PRIVILEGE_ESCALATION,riskLevel=RiskLevel.HIGH,sourceRef="SeImpersonate",author="JABBER
+Sudo Config Analyzer",description="Parses sudoers for escalation paths.
+UAC Bypass Generator",description="Generates UAC bypass payloads.
+Token Impersonation Checker",description="Checks for token impersonation privileges.
+SUID Enumerator",description="Finds SUID/SGID binaries for privesc vectors.
+Windows DLL Injection",description="Exploit DLL injection/hijacking",category=Category.PRIVILEGE_ESCALATION,riskLevel=RiskLevel.HIGH,sourceRef="DLL",author="JABBER
+Linux Sudo & SUID",description="Exploit sudo/SUID flaws",category=Category.PRIVILEGE_ESCALATION,riskLevel=RiskLevel.HIGH,sourceRef="Sudo abuse",author="JABBER
+Linux Kernel Exploit",description="Exploit kernel vulnerabilities",category=Category.PRIVILEGE_ESCALATION,riskLevel=RiskLevel.CRITICAL,sourceRef="Dirty Pipe, OverlayFS",author="JABBER
+Hash Generator",description="Computes MD5/SHA1/SHA256/SHA512 hashes.
+RSA Key Generator",description="Generates RSA key pairs.
+ROT13 Cipher",description="Caesar cipher with configurable rotation.
+XOR Cipher",description="XOR encryption for payload encoding.
+Base64 Encoder/Decoder",description="Base64/Base64URL encode/decode.
+AES Encryption",description="AES-128/256 encrypt/decrypt in CBC/GCM mode.
+XML Exporter",description="Generates XML reports.
+CSV Exporter",description="Exports findings to CSV spreadsheets.
+PDF Report Wrapper",description="Converts reports to PDF format.
+Markdown Exporter",description="Creates markdown reports for documentation.
+JSON Exporter",description="Exports structured JSON reports.
+HTML Report Generator",description="Generates styled HTML assessment reports.
+MFA Bypass Analyzer",description="Analyzes MFA for bypass techniques.
+Email Spoofer",description="Crafts spoofed SMTP email headers.
+SMS Spoof Builder",description="Creates smishing payloads.
+Phishing Email Builder",description="Generates phishing email templates.
+Malicious Doc Builder",description="Generates macro-enabled document payloads.
+QR Code Generator",description="Generates QR codes with malicious data.
+SSH Key Collector",description="Discovers SSH private keys for lateral movement.
+Kerberoasting",description="Service account password cracking via TGS ticket extraction",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.MEDIUM,sourceRef="Kerberoasting",author="JABBER
+Pass-the-Ticket",description="Lateral movement via Kerberos ticket injection without password",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.HIGH,sourceRef="Kerberoast",author="JABBER
+WinRM Shell",description="Remote PowerShell via WinRM.
+RDP Credential Tester",description="Tests RDP with credential lists.
+WinRM Abuse",description="Lateral movement via Windows Remote Management (WinRM) exploitation",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.HIGH,sourceRef="WinRM",author="JABBER
+WMI Execution",description="Remote command exec via WMI.
+SMB Relay",description="NTLM relay attack to capture and relay authentication to targets",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.CRITICAL,sourceRef="NTLMRelay",author="JABBER
+DCOM Lateral",description="Lateral movement via DCOM object instantiation for RCE",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.HIGH,sourceRef="DCOMExec",author="JABBER
+Credential Spraying",description="Lateral movement via multi-user credential spraying across targets",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.HIGH,sourceRef="AccountLockout",author="JABBER
+Golden Ticket",description="Lateral movement via forged Kerberos TGT creation without user password",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.CRITICAL,sourceRef="KirbiTicket",author="JABBER
+DCOM Lateral Movement",description="Uses DCOM objects for remote execution.
+Pass-the-Hash",description="Lateral movement via NTLM hash reuse without plaintext password",category=Category.LATERAL_MOVEMENT,riskLevel=RiskLevel.HIGH,sourceRef="psexec, wmiexec",author="JABBER
+PsExec Native",description="Remote command exec via SMB service creation.
+Sleep Mask Persistence",description="In-memory sleep masking with re-encryption.
+URL Encoder/Decoder",description="Encodes/decodes URL-encoded strings.
+Registry Hive Parser",description="Parses Windows registry hives.
+EXIF Metadata Extractor",description="Extracts EXIF metadata from images.
+IP Converter",description="Converts IP formats: decimal, hex, octal.
+String Analyzer",description="Analyzes string length, entropy, and encoding.
+Prefetch Analyzer",description="Reads Windows Prefetch execution history.
+Hex Dump Tool",description="Converts between hex, ASCII, and binary.
+Quick CIDR Calculator",description="CIDR notation calculator for network planning.
+HTTP C2 Beacon",description="Configures HTTP C2 beacon profiles.
+NTP Time Checker",description="Verifies NTP time sync for Kerberos prereqs.
+Browser Forensics",description="Extracts browser artifacts for forensic analysis.
+SOCKS Proxy Pivot",description="SOCKS tunnel through compromised hosts.
+Domain Fronting",description="Domain fronting profile configurator.
+SOCKS5 Server",description="Deploys SOCKS5 proxy for routing.
+Event Log Exporter",description="Exports and filters Windows event logs.
+DNS C2 Channel",description="Creates DNS-based covert C2 channels.
+Memory Dump Analyzer",description="Parses memory dumps for credentials.

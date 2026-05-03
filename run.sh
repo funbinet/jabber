@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Unified Launcher v4.0.0 (production)
+# JABBER — Unified Launcher V5.5 (production)
 # Modes:  desk (default)  |  web  |  status
 # Created by Funbinet (dancan.tech)
 # ============================================================
@@ -11,7 +11,7 @@ JABBER_HOME="${JABBER_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 LOG_DIR="${JABBER_HOME}/logs"
 BACKEND_PORT=8314
 FRONTEND_PORT=5173
-export GRADLE_USER_HOME="${GRADLE_USER_HOME:-/home/$(whoami)/.gradle_jrts}"
+export GRADLE_USER_HOME="${GRADLE_USER_HOME:-/home/$(whoami)/.gradle_jabber}"
 CACHE_DIR="${GRADLE_USER_HOME}/project_cache"
 export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
 
@@ -25,10 +25,11 @@ banner() {
   echo -e "${R}     ╦╔═╗╔╗ ╔╗ ╔═╗╦═╗${NC}"
   echo -e "${R}     ║╠═╣╠╩╗╠╩╗║╣ ╠╦╝${NC}"
   echo -e "${R}    ╚╝╩ ╩╚═╝╚═╝╚═╝╩╚═${NC}"
-  echo -e "${W}    Red Teaming Suite V4.0${NC}"
+  echo -e "${W}    JABBER V 5.5.0${NC}"
   echo -e "${C}    Created by Funbinet${NC}"
   echo ""
 }
+
 
 log()     { echo -e "${B}[$(date +%H:%M:%S)]${NC} $1"; }
 ok()      { echo -e "${G}[$(date +%H:%M:%S)] ✓${NC} $1"; }
@@ -75,13 +76,13 @@ start_backend() {
   fi
 
   cd "${JABBER_HOME}"
-  nohup ./gradlew --project-cache-dir "${CACHE_DIR}" :jrts-core:bootRun --no-daemon \
+  nohup ./gradlew --project-cache-dir "${CACHE_DIR}" :jabber-core:bootRun --no-daemon \
     > "${LOG_DIR}/backend.log" 2>&1 &
   local PID=$!
   echo "$PID" > "${LOG_DIR}/backend.pid"
 
   # Wait for health endpoint
-  local max=90 i=0
+  local max=180 i=0
   while [ $i -lt $max ]; do
     if curl --noproxy "*" -sf "http://127.0.0.1:${BACKEND_PORT}/api/info" > /dev/null 2>&1; then
       ok "Backend online — port ${BACKEND_PORT}"
@@ -89,13 +90,15 @@ start_backend() {
     fi
     if ! pid_running "$PID"; then
       fail "Backend process died. Check ${LOG_DIR}/backend.log"
-      tail -5 "${LOG_DIR}/backend.log" 2>/dev/null
+      tail -n 20 "${LOG_DIR}/backend.log" 2>/dev/null
       return 1
     fi
     sleep 1
     i=$((i + 1))
   done
   fail "Backend did not respond after ${max}s. Check ${LOG_DIR}/backend.log"
+  warn "Last 20 lines of ${LOG_DIR}/backend.log:"
+  tail -n 20 "${LOG_DIR}/backend.log" 2>/dev/null
   return 1
 }
 
@@ -113,7 +116,7 @@ start_frontend() {
     sleep 1
   fi
 
-  cd "${JABBER_HOME}/jrts-ui"
+  cd "${JABBER_HOME}/jabber-ui"
   nohup npx vite --port ${FRONTEND_PORT} \
     > "${LOG_DIR}/frontend.log" 2>&1 &
   local PID=$!
@@ -140,10 +143,10 @@ start_frontend() {
 
 # ── Launch Electron Desktop ─────────────────────────────────
 launch_desktop() {
-  cd "${JABBER_HOME}/jrts-ui"
+  cd "${JABBER_HOME}/jabber-ui"
 
   if ! npx electron --version &>/dev/null 2>&1; then
-    die "Electron not found. Run: cd jrts-ui && npm install"
+    die "Electron not found. Run: cd jabber-ui && npm install"
   fi
 
   nohup npx electron . --dev \
@@ -250,7 +253,7 @@ case "$MODE" in
 
   *)
     echo ""
-    echo -e "${W}JABBER${NC} — Red Teaming Suite V4.0"
+    echo -e "${W}JABBER${NC} V5.5"
     echo ""
     echo "Usage: $0 [mode]"
     echo ""

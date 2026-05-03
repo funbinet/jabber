@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# JABBER Red Teaming Suite — Graceful Shutdown v4.0.0
+# JABBER — Graceful Shutdown V5.5.0
 # Created by Funbinet (dancan.tech)
 # ============================================================
 
@@ -57,11 +57,11 @@ kill_service() {
 
 # ── Kill Java backend processes ──────────────────────────────
 kill_java_residuals() {
-  if pgrep -f "jrts-core\|jrts-server" > /dev/null 2>&1; then
-    pkill -f "jrts-core\|jrts-server" 2>/dev/null || true
+  if pgrep -f "jabber-core\|jabber-server" > /dev/null 2>&1; then
+    pkill -f "jabber-core\|jabber-server" 2>/dev/null || true
     sleep 1
-    if pgrep -f "jrts-core\|jrts-server" > /dev/null 2>&1; then
-      pkill -9 -f "jrts-core\|jrts-server" 2>/dev/null || true
+    if pgrep -f "jabber-core\|jabber-server" > /dev/null 2>&1; then
+      pkill -9 -f "jabber-core\|jabber-server" 2>/dev/null || true
     fi
     ok "Terminated residual Java processes"
   fi

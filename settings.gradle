@@ -1,5 +1,5 @@
-rootProject.name = 'jrts'
+rootProject.name = 'jabber'
 
-include 'jrts-core'
-include 'jrts-data'
-include 'jrts-modules'
+include 'jabber-core'
+include 'jabber-data'
+include 'jabber-modules'

@@ -1,34 +1,34 @@
 <div align="center">
-  <img src="../jabber-logo.png" width="150" alt="JABBER Logo">
-  <h1>JABBER RED TEAMING SUITE</h1>
-  <br>
-  <h3>DEBIAN PACKAGE GUIDE</h3>
+  <img src="https://raw.githubusercontent.com/funbinet/jabber-framework/main/jabber-logo.png" width="120" alt="JABBER Logo">
+  <h1><b>JABBER+</b></h1>
+  <h3>THE OFFENSIVE SECURITY FRAMEWORK</h3>
+  <p><b>Version 5.5.0</b></p>
 </div>
 
 ---
 
 ## Overview
 
-This directory contains the Debian packaging pipeline for JABBER V4.0.0.  
+This directory contains the Debian packaging pipeline for JABBER V 5.5.0.  
 The build script produces two `.deb` packages (AMD64 and ARM64) that install the complete platform with the `jabber` command.
 
 ## Build the .deb Package
 
 ```bash
-cd /home/bane/jrts/packaging
+cd /home/bane/jabber/packaging
 ./build-deb.sh
 ```
 
 Output:
-- `build-deb/jabber_4.0.0_amd64.deb`
-- `build-deb/jabber_4.0.0_arm64.deb`
+- `build-deb/jabber_5.5.0_amd64.deb`
+- `build-deb/jabber_5.5.0_arm64.deb`
 
 ## Package Contents
 
 | Installed Path | Purpose |
 |----------------|---------|
 | `/opt/jabber/` | Application root |
-| `/opt/jabber/lib/jrts-server.jar` | Backend JAR |
+| `/opt/jabber/lib/jabber-server.jar` | Backend JAR |
 | `/opt/jabber/ui/` | Built frontend + Electron |
 | `/opt/jabber/run.sh` | Launcher script |
 | `/opt/jabber/stop.sh` | Shutdown script |
@@ -40,7 +40,7 @@ Output:
 ## Installation
 
 ```bash
-sudo dpkg -i jabber_4.0.0_amd64.deb
+sudo dpkg -i jabber_5.5.0_amd64.deb
 ```
 
 ## Usage
@@ -69,7 +69,7 @@ sudo rm -rf /opt/jabber
 
 The `build-deb.sh` script performs 8 phases:
 1. Clean previous build artifacts
-2. Build backend JAR (`gradlew :jrts-core:bootJar`)
+2. Build backend JAR (`gradlew :jabber-core:bootJar`)
 3. Build frontend (`npm ci && npm run build`)
 4. Assemble package structure under `/opt/jabber`
 5. Create DEBIAN control files
@@ -81,7 +81,7 @@ The `build-deb.sh` script performs 8 phases:
 
 <div align="center">
 
-**JABBER Red Teaming Suite V4.0.0** · Packaging Systems Ready ✅  
+**JABBER V 5.5.0** · Packaging Systems Ready ✅  
 **© 2026 Funbinet Inc. All Rights Reserved.**
 
 </div>
